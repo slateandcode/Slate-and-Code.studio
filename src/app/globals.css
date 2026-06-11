@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+@theme {
+  /* ——— Palette ——— */
+  --color-ink: #0b0b0b; /* page background */
+  --color-pit: #090909; /* deepest background */
+  --color-surface: #111111; /* card surface */
+  --color-raised: #151515; /* raised surface */
+  --color-well: #0e0e0e; /* inset surface (inputs, previews) */
+  --color-ivory: #f4f1ea; /* primary text */
+  --color-fog: #8a8a8a; /* muted text */
+  --color-line: #252525; /* default border */
+  --color-edge: #2a2a2a; /* stronger border */
+  --color-gold: #d6a85a; /* primary accent */
+  --color-blue: #4da3ff; /* technical accent */
+
+  /* ——— Type ——— */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-grotesk), var(--font-inter), ui-sans-serif,
+    sans-serif;
+  --font-serif: var(--font-instrument), ui-serif, Georgia, serif;
+}
+
+/* Uppercase micro-label used for section eyebrows and tags */
+@utility micro {
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* Thin hairline divider */
+@utility hairline {
+  border-color: var(--color-line);
+}
+
+/* Hollow display text — outline only, like blueprint lettering */
+@utility text-outline {
+  -webkit-text-stroke: 1.5px rgba(244, 241, 234, 0.9);
+  color: transparent;
+}
+
+/* Editorial serif italic — used for single accent words inside display type */
+@utility serif-accent {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.08em;
+  line-height: 1;
+  letter-spacing: 0.005em;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-ivory);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Cinematic film grain across the whole site */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+::selection {
+  background: rgba(214, 168, 90, 0.28);
+  color: #f4f1ea;
+}
+
+:focus-visible {
+  outline: 1.5px solid rgba(214, 168, 90, 0.65);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Scrollbar tuned to the palette */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #090909;
+}
+::-webkit-scrollbar-thumb {
+  background: #242424;
+  border-radius: 5px;
+  border: 2px solid #090909;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #333;
+}
+
+/* Faint blueprint grid used behind hero / section backdrops */
+.grid-faint {
+  background-image: linear-gradient(
+      to right,
+      rgba(244, 241, 234, 0.025) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgba(244, 241, 234, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Radial mask so decorative grids fall off toward edges */
+.mask-fade {
+  mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 40%,
+    black 30%,
+    transparent 75%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 70% 60% at 50% 40%,
+    black 30%,
+    transparent 75%
+  );
+}
+
+/* ——— Cursor-tracked spotlight on cards ———
+   JS sets --spot-x / --spot-y; --spot-rgb switches gold/blue per card. */
+.spotlight {
+  position: relative;
+}
+.spotlight::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(
+    440px circle at var(--spot-x, 50%) var(--spot-y, 40%),
+    rgba(var(--spot-rgb, 214, 168, 90), 0.09),
+    transparent 65%
+  );
+}
+.spotlight:hover::after {
+  opacity: 1;
+}
+@media (hover: none) {
+  .spotlight::after {
+    display: none;
+  }
+}
+
+/* ——— Marquee ticker ——— */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee 36s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
+
+/* ——— One-shot sheen sweep on solid CTAs ——— */
+.btn-sheen {
+  position: relative;
+  overflow: hidden;
+}
+.btn-sheen::after {
+  content: "";
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -45%;
+  width: 32%;
+  transform: skewX(-22deg);
+  background: linear-gradient(
+    105deg,
+    transparent,
+    rgba(255, 255, 255, 0.38),
+    transparent
+  );
+  transition: left 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.btn-sheen:hover::after {
+  left: 130%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-sheen::after {
+    display: none;
+  }
+}

@@ -1,0 +1,175 @@
+import type { ReactNode } from "react";
+import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
+import SpotlightCard from "@/components/SpotlightCard";
+import {
+  CarInspectionPreview,
+  MubarakAutoPreview,
+  UntoldArchivesPreview,
+  CrescentPreview,
+  MahjongPreview,
+} from "@/components/home/previews";
+
+type Project = {
+  name: string;
+  type: string;
+  technical?: boolean; // blue accent for internal-tool tags
+  status?: string;
+  description: string;
+  detail: string;
+  preview: ReactNode;
+  span: string; // grid column span
+};
+
+const PROJECTS: Project[] = [
+  {
+    name: "Car Inspection Site",
+    type: "Website",
+    description:
+      "A premium business website for a vehicle inspection company, built to create trust, explain services clearly, and turn visitors into inquiries.",
+    detail: "Designed for trust, clarity, and conversion.",
+    preview: <CarInspectionPreview />,
+    span: "lg:col-span-7",
+  },
+  {
+    name: "MubarakAuto Website",
+    type: "Website",
+    description:
+      "A digital presence for a B2B spare parts business, focused on credibility, structure, and easier client communication.",
+    detail: "Built for structure, credibility, and clearer client communication.",
+    preview: <MubarakAutoPreview />,
+    span: "lg:col-span-5",
+  },
+  {
+    name: "Untold Archives Website",
+    type: "Media Brand",
+    description:
+      "A cinematic web experience for a documentary-style media brand, built around storytelling, atmosphere, and visual identity.",
+    detail: "A cinematic web presence for a documentary-style media brand.",
+    preview: <UntoldArchivesPreview />,
+    span: "lg:col-span-5",
+  },
+  {
+    name: "Crescent Car Software",
+    type: "Internal Tool",
+    technical: true,
+    description:
+      "A custom reporting tool designed to organize inspection data and generate polished client-facing reports.",
+    detail: "Built to simplify reporting and client delivery.",
+    preview: <CrescentPreview />,
+    span: "lg:col-span-7",
+  },
+  {
+    name: "Mahjong Website Redesign",
+    type: "Redesign",
+    status: "In Progress",
+    description:
+      "A refined redesign focused on visual clarity, smoother navigation, and a more premium brand experience.",
+    detail: "Sharper hierarchy, calmer surfaces, smoother navigation.",
+    preview: <MahjongPreview />,
+    span: "lg:col-span-12",
+  },
+];
+
+function ProjectCard({
+  project,
+  index,
+  wide,
+}: {
+  project: Project;
+  index: number;
+  wide?: boolean;
+}) {
+  return (
+    <SpotlightCard
+      color={project.technical ? "blue" : "gold"}
+      className="h-full rounded-lg"
+    >
+      <article
+        className={`group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface transition-all duration-500 hover:-translate-y-1 hover:border-edge hover:shadow-[0_24px_60px_rgba(0,0,0,0.45)] ${
+          wide ? "lg:flex-row" : ""
+        }`}
+      >
+        <div
+          aria-hidden
+          className={`relative shrink-0 overflow-hidden border-b border-line ${
+            wide ? "h-56 lg:h-auto lg:w-[46%] lg:border-b-0 lg:border-r" : "h-56 sm:h-64"
+          }`}
+        >
+          <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.025]">
+            {project.preview}
+          </div>
+        </div>
+
+        <div className="relative flex flex-1 flex-col p-6 sm:p-7">
+          {/* Ghost index watermark */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-5 top-4 font-display text-[2.6rem] font-semibold leading-none text-ivory/[0.05] transition-colors duration-500 group-hover:text-ivory/[0.09]"
+          >
+            {String(index + 1).padStart(2, "0")}
+          </span>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className={`micro rounded border px-2.5 py-1.5 ${
+                project.technical
+                  ? "border-blue/30 bg-blue/[0.07] text-blue shadow-[0_0_14px_rgba(77,163,255,0.12)]"
+                  : "border-line bg-raised text-fog"
+              }`}
+            >
+              {project.type}
+            </span>
+            {project.status && (
+              <span className="micro rounded border border-gold/40 bg-gold/[0.07] px-2.5 py-1.5 text-gold">
+                {project.status}
+              </span>
+            )}
+          </div>
+
+          <h3 className="mt-4 font-display text-xl font-semibold text-ivory">
+            {project.name}
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-fog">{project.description}</p>
+
+          <p className="mt-auto flex items-center gap-2.5 pt-5 text-[13px] text-ivory/70">
+            <span className="h-px w-5 shrink-0 bg-gold/70 transition-all duration-500 group-hover:w-9" />
+            {project.detail}
+          </p>
+        </div>
+      </article>
+    </SpotlightCard>
+  );
+}
+
+export default function SelectedWork() {
+  return (
+    <section id="work" className="scroll-mt-24 border-t border-line bg-pit">
+      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
+        <SectionHeading
+          eyebrow="Selected Work"
+          title={
+            <>
+              Work built for{" "}
+              <em className="serif-accent">real businesses</em>, not just
+              portfolios.
+            </>
+          }
+          lead="Websites, internal tools, and brand experiences — each one designed around a specific business problem."
+        />
+
+        <div className="mt-14 grid gap-5 lg:grid-cols-12">
+          {PROJECTS.map((p, i) => (
+            <Reveal key={p.name} delay={(i % 2) * 0.12} className={p.span}>
+              <ProjectCard
+                project={p}
+                index={i}
+                wide={p.span === "lg:col-span-12"}
+              />
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
