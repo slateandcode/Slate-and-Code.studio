@@ -8,7 +8,7 @@ import os from "node:os";
 const OUT = join(os.tmpdir(), "snc-shots");
 mkdirSync(OUT, { recursive: true });
 
-const BASE = process.env.BASE_URL || "http://localhost:3000";
+const BASE = process.env.BASE_URL || "http://localhost:4500";
 
 const EDGE_PATHS = [
   "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe",
