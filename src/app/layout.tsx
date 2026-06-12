@@ -4,7 +4,6 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
-import Cursor from "@/components/Cursor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -47,7 +46,6 @@ export default function RootLayout({
     >
       <body className="bg-ink font-sans text-ivory">
         <SmoothScroll />
-        <Cursor />
         <Nav />
         <main>{children}</main>
         <Footer />

@@ -68,7 +68,6 @@ export default function RedesignSlider() {
   return (
     <div
       ref={ref}
-      data-cursor
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       className="relative h-full cursor-ew-resize overflow-hidden bg-well [touch-action:pan-y]"

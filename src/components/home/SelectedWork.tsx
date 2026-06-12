@@ -17,6 +17,7 @@ type Project = {
   status?: string;
   description: string;
   detail: string;
+  url?: string; // live site — makes the whole card a link
   preview: ReactNode;
   span: string; // grid column span
 };
@@ -28,6 +29,7 @@ const PROJECTS: Project[] = [
     description:
       "A premium business website for a vehicle inspection company, built to create trust, explain services clearly, and turn visitors into inquiries.",
     detail: "Designed for trust, clarity, and conversion.",
+    url: "https://crescentcarcheck.com",
     preview: <CarInspectionPreview />,
     span: "lg:col-span-7",
   },
@@ -37,6 +39,7 @@ const PROJECTS: Project[] = [
     description:
       "A digital presence for a B2B spare parts business, focused on credibility, structure, and easier client communication.",
     detail: "Built for structure, credibility, and clearer client communication.",
+    url: "https://mubarakauto.ae",
     preview: <MubarakAutoPreview />,
     span: "lg:col-span-5",
   },
@@ -46,6 +49,7 @@ const PROJECTS: Project[] = [
     description:
       "A cinematic web experience for a documentary-style media brand, built around storytelling, atmosphere, and visual identity.",
     detail: "A cinematic web presence for a documentary-style media brand.",
+    url: "https://untoldarchives.com",
     preview: <UntoldArchivesPreview />,
     span: "lg:col-span-5",
   },
@@ -80,64 +84,99 @@ function ProjectCard({
   index: number;
   wide?: boolean;
 }) {
+  const shellClass = `group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface transition-all duration-500 hover:-translate-y-1 hover:border-edge hover:shadow-[0_24px_60px_rgba(0,0,0,0.45)] ${
+    wide ? "lg:flex-row" : ""
+  }`;
+
+  const inner = (
+    <>
+      <div
+        aria-hidden
+        className={`relative shrink-0 overflow-hidden border-b border-line ${
+          wide ? "h-56 lg:h-auto lg:w-[46%] lg:border-b-0 lg:border-r" : "h-56 sm:h-64"
+        }`}
+      >
+        <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.025]">
+          {project.preview}
+        </div>
+      </div>
+
+      <div className="relative flex flex-1 flex-col p-6 sm:p-7">
+        {/* Ghost index watermark */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute right-5 top-4 font-display text-[2.6rem] font-semibold leading-none text-ivory/[0.05] transition-colors duration-500 group-hover:text-ivory/[0.09]"
+        >
+          {String(index + 1).padStart(2, "0")}
+        </span>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={`micro rounded border px-2.5 py-1.5 ${
+              project.technical
+                ? "border-blue/30 bg-blue/[0.07] text-blue shadow-[0_0_14px_rgba(77,163,255,0.12)]"
+                : "border-line bg-raised text-fog"
+            }`}
+          >
+            {project.type}
+          </span>
+          {project.status && (
+            <span className="micro rounded border border-gold/40 bg-gold/[0.07] px-2.5 py-1.5 text-gold">
+              {project.status}
+            </span>
+          )}
+        </div>
+
+        <h3 className="mt-4 font-display text-xl font-semibold text-ivory">
+          {project.name}
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-fog">{project.description}</p>
+
+        <p className="mt-auto flex flex-wrap items-center gap-x-2.5 gap-y-2 pt-5 text-[13px] text-ivory/70">
+          <span className="h-px w-5 shrink-0 bg-gold/70 transition-all duration-500 group-hover:w-9" />
+          <span className="flex-1">{project.detail}</span>
+          {project.url && (
+            <span className="flex shrink-0 items-center gap-1.5 text-[12px] font-semibold text-gold">
+              Visit site
+              <svg
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden
+                className="h-3 w-3 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+              >
+                <path
+                  d="M3.5 12.5 12.5 3.5M5.5 3.5h7v7"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </span>
+          )}
+        </p>
+      </div>
+    </>
+  );
+
   return (
     <SpotlightCard
       color={project.technical ? "blue" : "gold"}
       className="h-full rounded-lg"
     >
-      <article
-        className={`group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface transition-all duration-500 hover:-translate-y-1 hover:border-edge hover:shadow-[0_24px_60px_rgba(0,0,0,0.45)] ${
-          wide ? "lg:flex-row" : ""
-        }`}
-      >
-        <div
-          aria-hidden
-          className={`relative shrink-0 overflow-hidden border-b border-line ${
-            wide ? "h-56 lg:h-auto lg:w-[46%] lg:border-b-0 lg:border-r" : "h-56 sm:h-64"
-          }`}
+      {project.url ? (
+        <a
+          href={project.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={`${project.name}, visit live site`}
+          className={shellClass}
         >
-          <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.025]">
-            {project.preview}
-          </div>
-        </div>
-
-        <div className="relative flex flex-1 flex-col p-6 sm:p-7">
-          {/* Ghost index watermark */}
-          <span
-            aria-hidden
-            className="pointer-events-none absolute right-5 top-4 font-display text-[2.6rem] font-semibold leading-none text-ivory/[0.05] transition-colors duration-500 group-hover:text-ivory/[0.09]"
-          >
-            {String(index + 1).padStart(2, "0")}
-          </span>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <span
-              className={`micro rounded border px-2.5 py-1.5 ${
-                project.technical
-                  ? "border-blue/30 bg-blue/[0.07] text-blue shadow-[0_0_14px_rgba(77,163,255,0.12)]"
-                  : "border-line bg-raised text-fog"
-              }`}
-            >
-              {project.type}
-            </span>
-            {project.status && (
-              <span className="micro rounded border border-gold/40 bg-gold/[0.07] px-2.5 py-1.5 text-gold">
-                {project.status}
-              </span>
-            )}
-          </div>
-
-          <h3 className="mt-4 font-display text-xl font-semibold text-ivory">
-            {project.name}
-          </h3>
-          <p className="mt-3 text-sm leading-relaxed text-fog">{project.description}</p>
-
-          <p className="mt-auto flex items-center gap-2.5 pt-5 text-[13px] text-ivory/70">
-            <span className="h-px w-5 shrink-0 bg-gold/70 transition-all duration-500 group-hover:w-9" />
-            {project.detail}
-          </p>
-        </div>
-      </article>
+          {inner}
+        </a>
+      ) : (
+        <article className={shellClass}>{inner}</article>
+      )}
     </SpotlightCard>
   );
 }
