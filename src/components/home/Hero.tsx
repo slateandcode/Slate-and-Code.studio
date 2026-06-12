@@ -78,7 +78,7 @@ export default function Hero() {
       <div className="mx-auto grid max-w-6xl items-center gap-14 px-5 pb-16 pt-36 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 lg:pb-24 lg:pt-44">
         <div>
           <motion.p {...rise(0.05)} className="micro text-gold">
-            GCC — Digital Studio
+            GCC · Digital Studio
           </motion.p>
 
           <h1 className="mt-7 font-display text-[3.1rem] font-semibold leading-[1.04] tracking-[-0.01em] sm:text-[4.2rem] lg:text-[4.6rem]">

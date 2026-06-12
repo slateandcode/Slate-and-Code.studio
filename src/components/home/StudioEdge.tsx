@@ -37,7 +37,7 @@ export default function StudioEdge() {
               Why the work <em className="serif-accent">holds up</em>.
             </>
           }
-          lead="One studio covering design, code, and content — so nothing gets lost between three different freelancers."
+          lead="One studio covering design, code, and content, so nothing gets lost between three different freelancers."
         />
 
         <div className="mt-14 grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2">

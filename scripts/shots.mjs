@@ -80,8 +80,22 @@ async function run(width, height, suffix) {
 
   // SERVICES
   await page.goto(`${BASE}/services`, { waitUntil: "domcontentloaded" });
-  await sleep(2000);
+  await sleep(2500);
   await shoot(page, `services-top${suffix}`);
+  // Client-brief typing block: catch it mid-type, then after it lands
+  await page.evaluate(() => {
+    const label = [...document.querySelectorAll("p")].find(
+      (p) => p.textContent === "Client brief",
+    );
+    const y = label
+      ? label.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.35
+      : document.body.scrollHeight * 0.14;
+    window.scrollTo(0, Math.max(0, y));
+  });
+  await sleep(1500);
+  await shoot(page, `services-brief-typing${suffix}`);
+  await sleep(2200);
+  await shoot(page, `services-brief-done${suffix}`);
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight * 0.42));
   await sleep(1400);
   await shoot(page, `services-cards${suffix}`);

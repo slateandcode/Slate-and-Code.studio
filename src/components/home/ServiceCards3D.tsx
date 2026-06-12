@@ -131,7 +131,7 @@ function MiniReel() {
         <div className="mt-1 flex items-center gap-1.5">
           <span className="h-1 w-1 rounded-full bg-gold" />
           <span className="text-[6.5px] uppercase tracking-[0.2em] text-fog">
-            Cut — 00:27
+            Cut · 00:27
           </span>
         </div>
       </div>

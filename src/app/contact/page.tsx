@@ -7,7 +7,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Start a project — websites, custom tools, short-form content, and complete digital systems across the GCC.",
+    "Start a project: websites, custom tools, short-form content, and complete digital systems across the GCC.",
 };
 
 export default function ContactPage() {
@@ -53,7 +53,7 @@ export default function ContactPage() {
                   Message on Instagram
                 </h2>
                 <p className="mt-2 text-sm text-fog">
-                  DMs are checked daily — the quickest way to talk through a
+                  DMs are checked daily, the quickest way to talk through a
                   project.
                 </p>
                 <p className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold">

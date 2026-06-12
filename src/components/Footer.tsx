@@ -18,7 +18,7 @@ export default function Footer() {
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-fog">
               A GCC-focused digital studio. Premium websites, business tools,
-              and short-form content — built with taste.
+              and short-form content, built with taste.
             </p>
           </div>
 
@@ -53,7 +53,7 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   className="text-gold/90 transition-colors hover:text-gold"
                 >
-                  Instagram — {SITE.instagramHandle}
+                  Instagram · {SITE.instagramHandle}
                 </a>
               </li>
               <li>

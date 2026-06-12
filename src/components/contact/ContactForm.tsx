@@ -47,12 +47,12 @@ export default function ContactForm() {
 
     // No backend yet — compose a prefilled email in the visitor's mail app
     // so the form still delivers a real inquiry.
-    const subject = `Project inquiry — ${data.get("service")}`;
+    const subject = `Project inquiry: ${data.get("service")}`;
     const body = [
       `Name: ${data.get("name")}`,
       `Business / brand: ${data.get("business")}`,
       `Email: ${data.get("email")}`,
-      `Instagram: ${data.get("instagram") || "—"}`,
+      `Instagram: ${data.get("instagram") || "not provided"}`,
       `Service: ${data.get("service")}`,
       `Estimated budget: ${data.get("budget")}`,
       "",
@@ -83,7 +83,7 @@ export default function ContactForm() {
           Your email draft is ready.
         </h3>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-fog">
-          We opened a prefilled email in your mail app — hit send and it&apos;s on
+          We opened a prefilled email in your mail app. Hit send and it&apos;s on
           its way. For the fastest reply, message us on Instagram at{" "}
           <a
             href={SITE.instagramUrl}

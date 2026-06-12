@@ -155,7 +155,7 @@ export default function SelectedWork() {
               portfolios.
             </>
           }
-          lead="Websites, internal tools, and brand experiences — each one designed around a specific business problem."
+          lead="Websites, internal tools, and brand experiences, each one designed around a specific business problem."
         />
 
         <div className="mt-14 grid gap-5 lg:grid-cols-12">

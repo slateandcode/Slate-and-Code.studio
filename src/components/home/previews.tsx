@@ -5,6 +5,8 @@
  * All previews are decorative (aria-hidden at the call site).
  */
 
+import RedesignSlider from "@/components/home/RedesignSlider";
+
 function BrowserChrome({ url }: { url: string }) {
   return (
     <div className="flex items-center gap-1.5 border-b border-line bg-raised px-3 py-2">
@@ -22,7 +24,7 @@ function BrowserChrome({ url }: { url: string }) {
 export function CarInspectionPreview() {
   return (
     <div className="flex h-full flex-col overflow-hidden bg-well">
-      <BrowserChrome url="inspection — book online" />
+      <BrowserChrome url="inspection · book online" />
       <div className="relative flex-1 p-4">
         <div className="flex items-center justify-between">
           <div className="h-1.5 w-10 rounded-sm bg-ivory/25" />
@@ -69,7 +71,7 @@ export function CarInspectionPreview() {
 export function MubarakAutoPreview() {
   return (
     <div className="flex h-full flex-col overflow-hidden bg-well">
-      <BrowserChrome url="b2b — spare parts catalogue" />
+      <BrowserChrome url="b2b · spare parts catalogue" />
       <div className="flex-1 p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -133,7 +135,7 @@ export function UntoldArchivesPreview() {
         {/* Editorial title block */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 text-center">
           <p className="text-[6.5px] uppercase tracking-[0.4em] text-gold/90">
-            EP. 04 — From the archive
+            EP. 04 · From the archive
           </p>
           <div className="mx-auto mt-3 h-3.5 w-[72%] rounded-sm bg-ivory/35" />
           <div className="mx-auto mt-2 h-3.5 w-[48%] rounded-sm bg-ivory/35" />
@@ -146,7 +148,7 @@ export function UntoldArchivesPreview() {
           <span className="text-[6.5px] tracking-[0.25em] text-fog">00:42:17</span>
         </div>
         <div className="absolute bottom-2.5 right-4 text-[6.5px] tracking-[0.25em] text-fog">
-          4K — 24FPS
+          4K · 24FPS
         </div>
       </div>
       <div className="h-4 w-full bg-black/80" />
@@ -220,50 +222,7 @@ export function CrescentPreview() {
   );
 }
 
-/** Redesign — split frame: washed-out "before" vs sharp "after". */
+/** Redesign — interactive drag slider: washed-out "before" vs sharp "after". */
 export function MahjongPreview() {
-  return (
-    <div className="relative flex h-full overflow-hidden bg-well">
-      {/* Before */}
-      <div className="flex-1 border-r border-edge bg-[#181715] p-4 opacity-55">
-        <div className="h-1.5 w-10 rounded-sm bg-[#5a554c]" />
-        <div className="mt-3 space-y-1.5">
-          <div className="h-2 w-[85%] rounded-sm bg-[#4a463f]" />
-          <div className="h-2 w-[60%] rounded-sm bg-[#4a463f]" />
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-1.5">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-8 rounded-sm bg-[#23211d]" />
-          ))}
-        </div>
-        <p className="mt-3 text-[6px] uppercase tracking-[0.2em] text-[#5a554c]">Before</p>
-      </div>
-      {/* After */}
-      <div className="flex-1 bg-well p-4">
-        <div className="flex items-center justify-between">
-          <div className="h-1.5 w-10 rounded-sm bg-ivory/30" />
-          <div className="h-3 w-8 rounded-sm bg-gold/70" />
-        </div>
-        <div className="mt-3 space-y-1.5">
-          <div className="h-2 w-[80%] rounded-sm bg-ivory/30" />
-          <div className="h-2 w-[52%] rounded-sm bg-ivory/30" />
-        </div>
-        <div className="mt-3 grid grid-cols-2 gap-1.5">
-          {[...Array(4)].map((_, i) => (
-            <div key={i} className="rounded-sm border border-line bg-surface p-1.5">
-              <div className="h-0.5 w-4 rounded-sm bg-gold/50" />
-              <div className="mt-1 h-0.5 w-full rounded-sm bg-ivory/10" />
-            </div>
-          ))}
-        </div>
-        <p className="mt-3 text-[6px] uppercase tracking-[0.2em] text-fog">After</p>
-      </div>
-      {/* Divider handle */}
-      <div className="absolute left-1/2 top-1/2 flex h-5 w-5 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold/50 bg-pit">
-        <svg viewBox="0 0 10 8" className="h-2 w-2.5">
-          <path d="M3 0L0 4l3 4M7 0l3 4-3 4" stroke="#D6A85A" strokeWidth="1.2" fill="none" />
-        </svg>
-      </div>
-    </div>
-  );
+  return <RedesignSlider />;
 }

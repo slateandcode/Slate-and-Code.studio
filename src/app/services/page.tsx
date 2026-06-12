@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
 import Reveal from "@/components/Reveal";
+import SectionHeading from "@/components/SectionHeading";
+import ServicesHero from "@/components/services/ServicesHero";
+import ClientBrief from "@/components/services/ClientBrief";
+import Faq from "@/components/services/Faq";
+import StickyCta from "@/components/services/StickyCta";
+import TypeText from "@/components/TypeText";
 import {
   ButtonGold,
   ButtonSecondary,
@@ -10,7 +16,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Websites, custom business tools, short-form content, and complete digital systems — built with design taste, technical execution, and business clarity.",
+    "Websites, custom business tools, short-form content, and complete digital systems, built with design taste, technical execution, and business clarity.",
 };
 
 type Service = {
@@ -197,65 +203,85 @@ export default function ServicesPage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden border-b border-line">
-        <div className="grid-faint mask-fade pointer-events-none absolute inset-0" />
-        <div className="relative mx-auto max-w-6xl px-5 pb-16 pt-36 sm:px-8 lg:pb-20 lg:pt-44">
-          <Reveal>
-            <p className="micro text-gold">Services</p>
-            <h1 className="mt-5 max-w-3xl font-display text-3xl font-semibold leading-[1.12] text-ivory sm:text-4xl lg:text-[2.75rem]">
-              Services built for businesses that need better digital presence,
-              cleaner systems, and stronger content.
-            </h1>
-            <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-fog sm:text-base">
-              From websites and internal tools to short-form edits and monthly
-              content systems, every project is built with design taste,
-              technical execution, and business clarity.
-            </p>
-          </Reveal>
-        </div>
-      </section>
+      <ServicesHero />
 
-      {/* Cards */}
+      {/* Client brief → services (one continuous flow) */}
       <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8 lg:py-24">
-        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s, i) => (
-            <Reveal key={s.name} delay={(i % 3) * 0.1} className="h-full">
-              <ServiceCard service={s} />
-            </Reveal>
-          ))}
-        </div>
+        <ClientBrief />
+        <div className="mt-16 lg:mt-20">
+          <SectionHeading
+            align="center"
+            eyebrow="Packages"
+            title={
+              <>
+                How it&apos;s <em className="serif-accent">packaged</em>.
+              </>
+            }
+            lead="Clear scopes and starting prices. Every engagement maps to one of these."
+          />
+          <div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {SERVICES.map((s, i) => (
+              <Reveal key={s.name} delay={(i % 3) * 0.1} className="h-full">
+                <ServiceCard service={s} />
+              </Reveal>
+            ))}
+          </div>
 
-        {/* Notes */}
-        <div className="mt-12 grid gap-5 md:grid-cols-2">
-          <Reveal>
-            <div className="h-full rounded-lg border border-line bg-pit p-7">
-              <p className="micro text-gold">Pricing note</p>
-              <p className="mt-3 text-sm leading-relaxed text-fog">
-                Prices are starting points. Final quotes depend on scope, pages,
-                features, content volume, integrations, timeline, and revision
-                needs.
-              </p>
-            </div>
-          </Reveal>
+          {/* Notes */}
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            <Reveal>
+              <div className="h-full rounded-lg border border-line bg-pit p-7">
+                <p className="micro text-gold">Pricing note</p>
+                <p className="mt-3 text-sm leading-relaxed text-fog">
+                  Prices are starting points. Final quotes depend on scope,
+                  pages, features, content volume, integrations, timeline, and
+                  revision needs.
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="h-full rounded-lg border border-line bg-pit p-7">
+                <p className="micro text-gold">Revisions</p>
+                <p className="mt-3 text-sm leading-relaxed text-fog">
+                  Projects include a clear revision structure. Major scope
+                  changes or new feature requests are quoted separately.
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="border-t border-line">
+        <div className="mx-auto grid max-w-6xl gap-10 px-5 py-20 sm:px-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14 lg:py-24">
+          <SectionHeading
+            eyebrow="FAQ"
+            title={
+              <>
+                Answers, <em className="serif-accent">before</em> you ask.
+              </>
+            }
+            lead="The questions most clients ask before starting a project."
+          />
           <Reveal delay={0.1}>
-            <div className="h-full rounded-lg border border-line bg-pit p-7">
-              <p className="micro text-gold">Revisions</p>
-              <p className="mt-3 text-sm leading-relaxed text-fog">
-                Projects include a clear revision structure. Major scope changes
-                or new feature requests are quoted separately.
-              </p>
-            </div>
+            <Faq />
           </Reveal>
         </div>
       </section>
+
+      {/* Floating mini-CTA */}
+      <StickyCta />
 
       {/* Closing CTA */}
-      <section className="border-t border-line bg-pit">
+      <section id="services-cta" className="border-t border-line bg-pit">
         <div className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
           <Reveal className="flex flex-col items-center text-center">
             <h2 className="max-w-xl font-display text-2xl font-semibold leading-snug text-ivory sm:text-3xl">
-              Not sure which package fits? Send a message — we&apos;ll point you
-              to the right one.
+              <TypeText
+                text="Not sure which package fits? Send a message, we'll point you to the right one."
+                speed={35}
+              />
             </h2>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
               <ButtonGold href={SITE.instagramUrl} external>
