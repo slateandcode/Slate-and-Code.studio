@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE } from "@/lib/site";
+import Year from "@/components/Year";
 
 export default function Footer() {
   return (
@@ -70,7 +71,7 @@ export default function Footer() {
 
         <div className="mt-12 flex flex-col gap-3 border-t border-line pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-fog">
-            © {new Date().getFullYear()} Slate & Code Studio. All rights reserved.
+            © <Year /> Slate & Code Studio. All rights reserved.
           </p>
           <p className="micro text-fog/70">Working across the GCC</p>
         </div>

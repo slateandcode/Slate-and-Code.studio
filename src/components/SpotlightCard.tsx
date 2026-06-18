@@ -5,8 +5,16 @@ import { useRef, type CSSProperties, type ReactNode } from "react";
 type Props = {
   children: ReactNode;
   className?: string;
-  /** Accent of the cursor-tracked glow */
-  color?: "gold" | "blue";
+  /**
+   * Accent of the cursor-tracked glow. Either a named preset or a raw
+   * "r, g, b" triplet (e.g. "52, 186, 178") for a per-card color.
+   */
+  color?: "gold" | "blue" | (string & {});
+};
+
+const PRESET_RGB: Record<string, string> = {
+  gold: "214, 168, 90",
+  blue: "77, 163, 255",
 };
 
 /**
@@ -20,6 +28,7 @@ export default function SpotlightCard({
   color = "gold",
 }: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const rgb = PRESET_RGB[color] ?? color;
 
   return (
     <div
@@ -32,11 +41,7 @@ export default function SpotlightCard({
         el.style.setProperty("--spot-y", `${e.clientY - r.top}px`);
       }}
       className={`spotlight ${className}`}
-      style={
-        {
-          "--spot-rgb": color === "blue" ? "77, 163, 255" : "214, 168, 90",
-        } as CSSProperties
-      }
+      style={{ "--spot-rgb": rgb } as CSSProperties}
     >
       {children}
     </div>

@@ -238,7 +238,7 @@ function StackCard({ pillar }: { pillar: Pillar }) {
 
 export default function ServiceCards3D() {
   return (
-    <section className="border-t border-line">
+    <section className="bg-pit">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <SectionHeading
           eyebrow="What We Build"

@@ -27,7 +27,7 @@ const instrument = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: "Slate & Code Studio | Design, Development, Film",
+    default: "Slate & Code Studio | Design, Develop & Direct",
     template: "%s | Slate & Code Studio",
   },
   description:
@@ -49,6 +49,7 @@ export default function RootLayout({
         <Nav />
         <main>{children}</main>
         <Footer />
+        <div aria-hidden className="intro-fade" />
       </body>
     </html>
   );

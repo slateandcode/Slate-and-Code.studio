@@ -2,16 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { SITE } from "@/lib/site";
+import { SITE, SERVICE_NAMES } from "@/lib/site";
 
-const SERVICES = [
-  "Website",
-  "Full-stack website",
-  "Custom business tool",
-  "Reels / shorts",
-  "Monthly content system",
-  "Complete bundle",
-];
+const SERVICES = SERVICE_NAMES;
 
 const BUDGETS = [
   "Under 2,000 AED",
@@ -26,6 +19,27 @@ const inputCls =
 
 const labelCls = "micro mb-2.5 block text-fog";
 
+type Status = "idle" | "submitting" | "sent" | "error";
+
+/** Builds a prefilled mailto: as a fallback if the server send fails. */
+function mailtoFallback(fd: FormData) {
+  const subject = `Project inquiry: ${fd.get("service")}`;
+  const body = [
+    `Name: ${fd.get("name")}`,
+    `Business / brand: ${fd.get("business")}`,
+    `Email: ${fd.get("email")}`,
+    `Instagram: ${fd.get("instagram") || "not provided"}`,
+    `Service: ${fd.get("service")}`,
+    `Estimated budget: ${fd.get("budget")}`,
+    "",
+    "Project details:",
+    `${fd.get("message")}`,
+  ].join("\n");
+  return `mailto:${SITE.email}?subject=${encodeURIComponent(
+    subject,
+  )}&body=${encodeURIComponent(body)}`;
+}
+
 function Chevron() {
   return (
     <svg
@@ -39,34 +53,38 @@ function Chevron() {
 }
 
 export default function ContactForm() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [mailto, setMailto] = useState("");
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const data = new FormData(e.currentTarget);
+    const fd = new FormData(e.currentTarget);
+    setMailto(mailtoFallback(fd));
+    setStatus("submitting");
 
-    // No backend yet — compose a prefilled email in the visitor's mail app
-    // so the form still delivers a real inquiry.
-    const subject = `Project inquiry: ${data.get("service")}`;
-    const body = [
-      `Name: ${data.get("name")}`,
-      `Business / brand: ${data.get("business")}`,
-      `Email: ${data.get("email")}`,
-      `Instagram: ${data.get("instagram") || "not provided"}`,
-      `Service: ${data.get("service")}`,
-      `Estimated budget: ${data.get("budget")}`,
-      "",
-      "Project details:",
-      `${data.get("message")}`,
-    ].join("\n");
-
-    window.location.href = `mailto:${SITE.email}?subject=${encodeURIComponent(
-      subject,
-    )}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fd.get("name"),
+          business: fd.get("business"),
+          email: fd.get("email"),
+          instagram: fd.get("instagram"),
+          service: fd.get("service"),
+          budget: fd.get("budget"),
+          message: fd.get("message"),
+          company_url: fd.get("company_url"), // honeypot
+        }),
+      });
+      if (!res.ok) throw new Error("request failed");
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
   }
 
-  if (sent) {
+  if (status === "sent") {
     return (
       <motion.div
         initial={{ opacity: 0, y: 16 }}
@@ -80,11 +98,11 @@ export default function ContactForm() {
           </svg>
         </span>
         <h3 className="mt-6 font-display text-xl font-semibold text-ivory">
-          Your email draft is ready.
+          Your inquiry is in.
         </h3>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-fog">
-          We opened a prefilled email in your mail app. Hit send and it&apos;s on
-          its way. For the fastest reply, message us on Instagram at{" "}
+          Thanks for reaching out. We&apos;ll get back to you soon. For the
+          fastest reply, message us on Instagram at{" "}
           <a
             href={SITE.instagramUrl}
             target="_blank"
@@ -95,16 +113,11 @@ export default function ContactForm() {
           </a>
           .
         </p>
-        <button
-          type="button"
-          onClick={() => setSent(false)}
-          className="mt-7 text-[13px] font-medium text-fog underline-offset-4 transition-colors hover:text-ivory hover:underline"
-        >
-          Back to the form
-        </button>
       </motion.div>
     );
   }
+
+  const submitting = status === "submitting";
 
   return (
     <form
@@ -187,15 +200,41 @@ export default function ContactForm() {
         </div>
       </div>
 
+      {/* Honeypot — hidden from real users; bots that fill it are dropped */}
+      <div className="hidden" aria-hidden>
+        <label htmlFor="company_url">Company URL</label>
+        <input id="company_url" name="company_url" tabIndex={-1} autoComplete="off" />
+      </div>
+
+      {status === "error" && (
+        <p className="mt-6 rounded-lg border border-[#5a2e2e] bg-[#1c1413] px-4 py-3 text-[13px] leading-relaxed text-[#e9b9b0]">
+          Something went wrong sending that. You can{" "}
+          <a href={mailto} className="font-semibold text-ivory underline underline-offset-2">
+            email us directly
+          </a>{" "}
+          or message us on Instagram at{" "}
+          <a
+            href={SITE.instagramUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-semibold text-ivory underline underline-offset-2"
+          >
+            {SITE.instagramHandle}
+          </a>
+          .
+        </p>
+      )}
+
       <button
         type="submit"
-        className="mt-8 inline-flex h-12 w-full items-center justify-center rounded-lg bg-gold px-6 text-sm font-semibold tracking-wide text-pit transition-all duration-300 hover:bg-[#e0b468] hover:shadow-[0_0_28px_rgba(214,168,90,0.22)] sm:w-auto"
+        disabled={submitting}
+        className="mt-8 inline-flex h-12 w-full items-center justify-center rounded-lg bg-gold px-6 text-sm font-semibold tracking-wide text-pit transition-all duration-300 hover:bg-[#e0b468] hover:shadow-[0_0_28px_rgba(214,168,90,0.22)] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
       >
-        Send inquiry
+        {submitting ? "Sending…" : "Send inquiry"}
       </button>
       <p className="mt-4 text-xs leading-relaxed text-fog/80">
-        Opens a prefilled email in your mail app. Prefer DMs? Instagram is the
-        fastest way to reach us.
+        We&apos;ll reply by email. Prefer DMs? Instagram is the fastest way to
+        reach us.
       </p>
     </form>
   );

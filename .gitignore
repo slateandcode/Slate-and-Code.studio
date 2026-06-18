@@ -6,3 +6,9 @@ next-env.d.ts
 *.tsbuildinfo
 .DS_Store
 .env*
+!.env.example
+
+# Never commit secret/key files
+API Keys.txt
+*.key
+secrets*

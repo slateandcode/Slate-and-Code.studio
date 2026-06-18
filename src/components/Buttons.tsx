@@ -58,6 +58,19 @@ export function ButtonPrimary({ href, children, className = "", external }: Butt
   );
 }
 
+/** Solid light CTA — monochrome alternative to the gold primary. */
+export function ButtonLight({ href, children, className = "", external }: ButtonProps) {
+  return (
+    <Wrapper
+      href={href}
+      external={external}
+      className={`${base} bg-ivory text-pit hover:bg-white hover:shadow-[0_0_28px_rgba(244,241,234,0.18)] ${className}`}
+    >
+      {children}
+    </Wrapper>
+  );
+}
+
 /** Quiet bordered CTA. */
 export function ButtonSecondary({ href, children, className = "", external }: ButtonProps) {
   return (

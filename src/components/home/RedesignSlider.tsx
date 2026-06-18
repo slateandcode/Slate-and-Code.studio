@@ -18,7 +18,7 @@ export default function RedesignSlider() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const reduce = useReducedMotion();
-  const [pct, setPct] = useState(55);
+  const [pct, setPct] = useState(50);
   const [interacted, setInteracted] = useState(false);
   const interactedRef = useRef(false);
   const hintRef = useRef<AnimationPlaybackControls | null>(null);
@@ -26,7 +26,7 @@ export default function RedesignSlider() {
   // One-time hint: divider eases left and back so it reads as draggable
   useEffect(() => {
     if (!inView || reduce || interactedRef.current) return;
-    const controls = animate(55, 38, {
+    const controls = animate(50, 33, {
       duration: 0.9,
       delay: 0.7,
       ease: [0.22, 1, 0.36, 1],
@@ -72,61 +72,97 @@ export default function RedesignSlider() {
       onPointerMove={onPointerMove}
       className="relative h-full cursor-ew-resize overflow-hidden bg-well [touch-action:pan-y]"
     >
-      {/* After — full layer underneath */}
-      <div className="absolute inset-0 p-4">
-        <div className="flex items-center justify-between">
-          <div className="h-1.5 w-10 rounded-sm bg-ivory/30" />
-          <div className="h-3 w-8 rounded-sm bg-gold/70" />
+      {/* After — refined layer underneath. Flex column so it fills the frame
+          at any aspect ratio (tall card on mobile, wide split on desktop). */}
+      <div className="absolute inset-0 flex flex-col p-4">
+        {/* nav */}
+        <div className="flex shrink-0 items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <span className="h-2 w-2 rotate-45 bg-gold/70" />
+            <span className="h-1.5 w-9 rounded-sm bg-ivory/30" />
+          </div>
+          <div className="flex items-center gap-1.5">
+            <span className="h-1 w-5 rounded-sm bg-ivory/15" />
+            <span className="h-1 w-5 rounded-sm bg-ivory/15" />
+            <span className="h-3 w-8 rounded-sm bg-gold/70" />
+          </div>
         </div>
-        <div className="mt-3 space-y-1.5">
-          <div className="h-2 w-[80%] rounded-sm bg-ivory/30" />
-          <div className="h-2 w-[52%] rounded-sm bg-ivory/30" />
+
+        {/* hero — centered in the leftover space so it fills tall and wide */}
+        <div className="flex flex-1 flex-col justify-center">
+          <div className="h-2.5 w-[60%] rounded-sm bg-ivory/35" />
+          <div className="mt-1.5 h-2.5 w-[38%] rounded-sm bg-ivory/35" />
+          <div className="mt-2 h-1.5 w-[48%] rounded-sm bg-ivory/12" />
         </div>
-        <div className="mt-3 grid grid-cols-2 gap-1.5">
-          {[...Array(4)].map((_, i) => (
+
+        {/* feature row */}
+        <div className="grid shrink-0 grid-cols-3 gap-1.5 pb-3">
+          {[...Array(3)].map((_, i) => (
             <div key={i} className="rounded-sm border border-line bg-surface p-1.5">
               <div className="h-0.5 w-4 rounded-sm bg-gold/50" />
-              <div className="mt-1 h-0.5 w-full rounded-sm bg-ivory/10" />
+              <div className="mt-1 h-0.5 w-full rounded-sm bg-ivory/12" />
+              <div className="mt-1 h-0.5 w-2/3 rounded-sm bg-ivory/10" />
             </div>
           ))}
         </div>
-        <p className="absolute bottom-3 right-4 text-[6px] uppercase tracking-[0.2em] text-fog">
+
+        <p className="pointer-events-none absolute bottom-2.5 right-4 text-[6px] uppercase tracking-[0.2em] text-fog">
           After
         </p>
       </div>
 
-      {/* Before — clipped to the left of the divider */}
+      {/* Before — washed-out original, clipped to the left of the divider.
+          Same skeleton as "after" but duller and cruder so the wipe reads
+          as a genuine redesign. */}
       <div
-        className="absolute inset-0 bg-[#181715] p-4"
+        className="absolute inset-0 flex flex-col bg-[#181715] p-4"
         style={{ clipPath: `inset(0 ${100 - pct}% 0 0)` }}
       >
-        <div className="opacity-55">
-          <div className="h-1.5 w-10 rounded-sm bg-[#5a554c]" />
-          <div className="mt-3 space-y-1.5">
-            <div className="h-2 w-[85%] rounded-sm bg-[#4a463f]" />
-            <div className="h-2 w-[60%] rounded-sm bg-[#4a463f]" />
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-1.5">
-            {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-8 rounded-sm bg-[#23211d]" />
-            ))}
+        <div className="flex shrink-0 items-center justify-between opacity-55">
+          <div className="h-1.5 w-12 rounded-sm bg-[#5a554c]" />
+          <div className="flex items-center gap-1.5">
+            <span className="h-1 w-5 rounded-sm bg-[#3f3b35]" />
+            <span className="h-1 w-5 rounded-sm bg-[#3f3b35]" />
           </div>
         </div>
-        <p className="absolute bottom-3 left-4 text-[6px] uppercase tracking-[0.2em] text-[#5a554c]">
+
+        <div className="flex flex-1 flex-col justify-center opacity-55">
+          <div className="h-2.5 w-[78%] rounded-sm bg-[#4a463f]" />
+          <div className="mt-1.5 h-2.5 w-[66%] rounded-sm bg-[#4a463f]" />
+          <div className="mt-2 h-1.5 w-[70%] rounded-sm bg-[#3a362f]" />
+        </div>
+
+        <div className="grid shrink-0 grid-cols-2 gap-1.5 pb-3 opacity-55">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="h-7 rounded-sm bg-[#23211d]" />
+          ))}
+        </div>
+
+        <p className="pointer-events-none absolute bottom-2.5 left-4 text-[6px] uppercase tracking-[0.2em] text-[#5a554c]">
           Before
         </p>
       </div>
 
-      {/* Divider + handle */}
+      {/* Divider + handle — a 24px-wide rail centered on the split via a
+          negative margin (universal), holding a full-height gold line and the
+          circular node. Both the line and the node are centered with
+          auto-margins, NOT the CSS `translate` property, so the line always
+          runs dead-centre through the node in every browser. */}
       <div
-        className="absolute inset-y-0 z-10 w-px bg-gold/70 shadow-[0_0_12px_rgba(214,168,90,0.45)]"
-        style={{ left: `${pct}%` }}
+        className="absolute inset-y-0 z-10 w-6"
+        style={{ left: `${pct}%`, marginLeft: "-12px" }}
       >
+        {/* Full-height gold line */}
+        <span className="pointer-events-none absolute inset-x-0 inset-y-0 mx-auto w-0.5 bg-gold/80 shadow-[0_0_12px_rgba(214,168,90,0.45)]" />
+
+        {/* Circular node, centered on the line by auto-margins */}
         <div
           data-handle
-          className="absolute left-1/2 top-1/2 flex h-6 w-6 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-gold/60 bg-pit shadow-[0_2px_10px_rgba(0,0,0,0.5)] [touch-action:none]"
+          className="absolute inset-0 m-auto flex h-6 w-6 items-center justify-center rounded-full border border-gold/70 bg-pit shadow-[0_2px_10px_rgba(0,0,0,0.55)] [touch-action:none]"
         >
-          <svg viewBox="0 0 10 8" className="h-2 w-2.5">
+          {/* Line redrawn through the node so the chevron sits within it */}
+          <span className="pointer-events-none absolute inset-x-0 inset-y-0 mx-auto w-0.5 bg-gold/80" />
+          <svg viewBox="0 0 10 8" className="relative h-2 w-2.5">
             <path
               d="M3 0L0 4l3 4M7 0l3 4-3 4"
               stroke="#D6A85A"

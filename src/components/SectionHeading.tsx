@@ -2,7 +2,8 @@ import type { ReactNode } from "react";
 import Reveal from "@/components/Reveal";
 
 type Props = {
-  eyebrow: string;
+  /** Optional kicker above the title; omit it for a bare headline */
+  eyebrow?: string;
   /** Accepts nodes so callers can embed serif-accent spans */
   title: ReactNode;
   lead?: string;
@@ -21,11 +22,13 @@ export default function SectionHeading({
   const center = align === "center";
   return (
     <Reveal className={center ? "text-center" : ""}>
-      <p className={`micro ${goldEyebrow ? "text-gold" : "text-fog"}`}>{eyebrow}</p>
+      {eyebrow && (
+        <p className={`micro ${goldEyebrow ? "text-gold" : "text-fog"}`}>{eyebrow}</p>
+      )}
       <h2
-        className={`mt-4 max-w-2xl font-display text-3xl font-semibold leading-[1.12] text-ivory sm:text-4xl ${
-          center ? "mx-auto" : ""
-        }`}
+        className={`max-w-2xl font-display text-3xl font-semibold leading-[1.12] text-ivory sm:text-4xl ${
+          eyebrow ? "mt-4" : ""
+        } ${center ? "mx-auto" : ""}`}
       >
         {title}
       </h2>

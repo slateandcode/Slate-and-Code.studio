@@ -2,5 +2,19 @@
 export const SITE = {
   instagramHandle: "@slateandcode.studio",
   instagramUrl: "https://instagram.com/slateandcode.studio",
-  email: "hello@slateandcode.com",
+  email: "hello@slateandcode.studio",
 } as const;
+
+/**
+ * Canonical service names — the single source of truth shared by the
+ * Services page cards and the contact form dropdown so they never drift.
+ * Keep these in lockstep with the cards in src/app/services/page.tsx.
+ */
+export const SERVICE_NAMES = [
+  "Web Presence",
+  "Business Website",
+  "Custom Business Tool",
+  "Short-Form Edit",
+  "Monthly Content System",
+  "Complete Digital System",
+] as const;

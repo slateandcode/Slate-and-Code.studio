@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Reveal from "@/components/Reveal";
+import ScrollFade from "@/components/ScrollFade";
 import SectionHeading from "@/components/SectionHeading";
 import SpotlightCard from "@/components/SpotlightCard";
 import {
@@ -14,6 +15,7 @@ type Project = {
   name: string;
   type: string;
   technical?: boolean; // blue accent for internal-tool tags
+  glow: string; // cursor-tracked glow color, "r, g, b"
   status?: string;
   description: string;
   detail: string;
@@ -26,6 +28,7 @@ const PROJECTS: Project[] = [
   {
     name: "Car Inspection Site",
     type: "Website",
+    glow: "214, 168, 90", // gold
     description:
       "A premium business website for a vehicle inspection company, built to create trust, explain services clearly, and turn visitors into inquiries.",
     detail: "Designed for trust, clarity, and conversion.",
@@ -36,6 +39,7 @@ const PROJECTS: Project[] = [
   {
     name: "MubarakAuto Website",
     type: "Website",
+    glow: "52, 186, 178", // teal
     description:
       "A digital presence for a B2B spare parts business, focused on credibility, structure, and easier client communication.",
     detail: "Built for structure, credibility, and clearer client communication.",
@@ -46,6 +50,7 @@ const PROJECTS: Project[] = [
   {
     name: "Untold Archives Website",
     type: "Media Brand",
+    glow: "224, 98, 110", // crimson
     description:
       "A cinematic web experience for a documentary-style media brand, built around storytelling, atmosphere, and visual identity.",
     detail: "A cinematic web presence for a documentary-style media brand.",
@@ -56,6 +61,7 @@ const PROJECTS: Project[] = [
   {
     name: "Crescent Car Software",
     type: "Internal Tool",
+    glow: "77, 163, 255", // blue
     technical: true,
     description:
       "A custom reporting tool designed to organize inspection data and generate polished client-facing reports.",
@@ -66,6 +72,7 @@ const PROJECTS: Project[] = [
   {
     name: "Mahjong Website Redesign",
     type: "Redesign",
+    glow: "168, 142, 245", // violet
     status: "In Progress",
     description:
       "A refined redesign focused on visual clarity, smoother navigation, and a more premium brand experience.",
@@ -84,8 +91,11 @@ function ProjectCard({
   index: number;
   wide?: boolean;
 }) {
+  // Wide card uses a grid for the side-by-side split. Grid degrades safely: if
+  // the lg: classes ever don't apply, it falls back to the base full-width
+  // stack (preview on top, text below) rather than a broken half-width column.
   const shellClass = `group flex h-full flex-col overflow-hidden rounded-lg border border-line bg-surface transition-all duration-500 hover:-translate-y-1 hover:border-edge hover:shadow-[0_24px_60px_rgba(0,0,0,0.45)] ${
-    wide ? "lg:flex-row" : ""
+    wide ? "lg:grid lg:grid-cols-[42%_minmax(0,1fr)]" : ""
   }`;
 
   const inner = (
@@ -93,7 +103,9 @@ function ProjectCard({
       <div
         aria-hidden
         className={`relative shrink-0 overflow-hidden border-b border-line ${
-          wide ? "h-56 lg:h-auto lg:w-[46%] lg:border-b-0 lg:border-r" : "h-56 sm:h-64"
+          wide
+            ? "h-56 lg:h-auto lg:min-h-[15rem] lg:border-b-0 lg:border-r"
+            : "h-56 sm:h-64"
         }`}
       >
         <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.025]">
@@ -160,10 +172,7 @@ function ProjectCard({
   );
 
   return (
-    <SpotlightCard
-      color={project.technical ? "blue" : "gold"}
-      className="h-full rounded-lg"
-    >
+    <SpotlightCard color={project.glow} className="h-full rounded-lg">
       {project.url ? (
         <a
           href={project.url}
@@ -183,10 +192,9 @@ function ProjectCard({
 
 export default function SelectedWork() {
   return (
-    <section id="work" className="scroll-mt-24 border-t border-line bg-pit">
-      <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
+    <section id="work" className="scroll-mt-24 bg-pit">
+      <ScrollFade className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <SectionHeading
-          eyebrow="Selected Work"
           title={
             <>
               Work built for{" "}
@@ -208,7 +216,7 @@ export default function SelectedWork() {
             </Reveal>
           ))}
         </div>
-      </div>
+      </ScrollFade>
     </section>
   );
 }
