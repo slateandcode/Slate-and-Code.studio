@@ -73,7 +73,7 @@ export async function POST(req: Request) {
   }
 
   const to = process.env.CONTACT_TO || SITE.email;
-  const from = process.env.CONTACT_FROM || "Slate & Code <onboarding@resend.dev>";
+  const from = process.env.CONTACT_FROM || "Slate & Code <inquiries@slateandcode.studio>";
 
   const text = [
     "New project inquiry",

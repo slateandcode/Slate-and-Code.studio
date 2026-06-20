@@ -1,7 +1,7 @@
 /** Central place for contact targets so every CTA stays in sync. */
 export const SITE = {
-  instagramHandle: "@slateandcode.studio",
-  instagramUrl: "https://instagram.com/slateandcode.studio",
+  instagramHandle: "@slateandcodestudio",
+  instagramUrl: "https://www.instagram.com/slateandcodestudio/",
   email: "hello@slateandcode.studio",
 } as const;
 
