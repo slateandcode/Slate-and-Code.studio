@@ -18,7 +18,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-fog">
-              A GCC-focused digital studio. Premium websites, business tools,
+              A digital studio. Premium websites, business tools,
               and short-form content, built with taste.
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function Footer() {
           <p className="text-xs text-fog">
             © <Year /> Slate & Code Studio. All rights reserved.
           </p>
-          <p className="micro text-fog/70">Working across the GCC</p>
+          <p className="micro text-fog/70">Working with brands worldwide</p>
         </div>
       </div>
     </footer>

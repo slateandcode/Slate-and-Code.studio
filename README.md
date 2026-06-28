@@ -1,6 +1,6 @@
 # Slate & Code Studio — Portfolio Website
 
-A premium three-page studio portfolio for a GCC-focused digital studio.
+A premium three-page studio portfolio for a globally-positioned digital studio.
 Built with Next.js (App Router), React 19, Tailwind CSS v4, and Framer Motion.
 
 ## Run it

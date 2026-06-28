@@ -35,13 +35,13 @@ const SERVICES: Service[] = [
   {
     tag: "Web",
     name: "Web Presence",
-    price: "from 2,000 AED",
+    price: "from $1,000",
     description:
       "Landing pages, business websites, and redesigns for brands that need a sharper online presence.",
     includes: [
       "Responsive design",
       "Frontend build",
-      "Contact / WhatsApp CTA",
+      "Contact / inquiry CTA",
       "Basic SEO structure",
       "Launch support",
     ],
@@ -51,7 +51,7 @@ const SERVICES: Service[] = [
   {
     tag: "Web",
     name: "Business Website",
-    price: "from 4,000 AED",
+    price: "from $2,500",
     description:
       "Multi-page websites and full-stack web experiences with stronger structure, forms, integrations, and dynamic functionality where needed.",
     includes: [
@@ -67,7 +67,7 @@ const SERVICES: Service[] = [
   {
     tag: "Tools",
     name: "Custom Business Tool",
-    price: "5,000–8,000+ AED",
+    price: "$3,000–$5,000+",
     description:
       "Custom internal tools built around the way your business actually works.",
     includes: [
@@ -86,7 +86,7 @@ const SERVICES: Service[] = [
   {
     tag: "Content",
     name: "Short-Form Edit",
-    price: "125–200 AED per reel",
+    price: "$75–$150 per reel",
     description:
       "Polished reels and shorts built from raw footage into structured, engaging edits.",
     includes: [
@@ -104,7 +104,7 @@ const SERVICES: Service[] = [
   {
     tag: "Retainer",
     name: "Monthly Content System",
-    price: "3,000–5,000 AED/month",
+    price: "$2,000–$3,000/month",
     description:
       "A recurring short-form content package for businesses that need consistent reels without managing every edit from scratch.",
     includes: [
@@ -279,7 +279,7 @@ export default function ServicesPage() {
           <Reveal className="flex flex-col items-center text-center">
             <h2 className="max-w-xl font-display text-2xl font-semibold leading-snug text-ivory sm:text-3xl">
               <TypeText
-                text="Not sure which package fits? Send a message, we'll point you to the right one."
+                text="Not sure which package fits? Send a message, I'll point you to the right one."
                 speed={35}
               />
             </h2>

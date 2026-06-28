@@ -45,7 +45,7 @@ export default function StickyCta() {
             <InstagramIcon className="h-4 w-4" />
           </span>
           <span className="text-[13px] font-semibold text-ivory">
-            Not sure? Message us
+            Not sure? Message me
           </span>
         </motion.a>
       )}

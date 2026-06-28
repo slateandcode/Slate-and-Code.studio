@@ -7,7 +7,7 @@ import { SITE } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Start a project: websites, custom tools, short-form content, and complete digital systems across the GCC.",
+    "Start a project: websites, custom tools, short-form content, and complete digital systems for brands worldwide.",
 };
 
 export default function ContactPage() {
@@ -24,7 +24,7 @@ export default function ContactPage() {
             </h1>
             <p className="mt-6 max-w-xl text-[15px] leading-relaxed text-fog sm:text-base">
               For websites, custom tools, short-form content, and complete
-              digital systems across the GCC.
+              digital systems. For brands anywhere.
             </p>
           </Reveal>
         </div>

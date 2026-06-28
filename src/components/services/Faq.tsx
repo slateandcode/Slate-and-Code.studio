@@ -10,7 +10,7 @@ const FAQS = [
   },
   {
     q: "What do you need from me to get started?",
-    a: "Your business goals, any brand assets you have (logo, colors, photos), and examples of sites you like. If something is missing, we help you figure it out during the project.",
+    a: "Your business goals, any brand assets you have (logo, colors, photos), and examples of sites you like. If something is missing, I help you figure it out during the project.",
   },
   {
     q: "How do payments work?",
@@ -26,7 +26,7 @@ const FAQS = [
   },
   {
     q: "What if I'm not sure which package I need?",
-    a: "Send a message on Instagram with a short description of your business and goals. We'll point you to the right package, no pressure attached.",
+    a: "Send a message on Instagram with a short description of your business and goals. I'll point you to the right package, no pressure attached.",
   },
 ];
 

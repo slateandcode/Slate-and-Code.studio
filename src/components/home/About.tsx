@@ -5,7 +5,7 @@ import SpotlightCard from "@/components/SpotlightCard";
 /** Identity rows for the studio card — kept anonymous, studio-voiced. */
 const FACTS = [
   { label: "Disciplines", value: "Design · Develop · Direct" },
-  { label: "Based", value: "Across the GCC" },
+  { label: "Works with", value: "Brands worldwide" },
   { label: "The way I work", value: "One point of contact, start to finish" },
 ];
 

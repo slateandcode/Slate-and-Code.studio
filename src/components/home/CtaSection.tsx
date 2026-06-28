@@ -34,7 +34,7 @@ export default function CtaSection() {
               <em className="serif-accent text-gold">premium</em>?
             </h2>
             <p className="relative mx-auto mt-6 max-w-md text-[15px] leading-relaxed text-fog">
-              Available for selected projects across the GCC.
+              Available for selected projects worldwide.
             </p>
 
             <div className="relative mt-10 flex flex-wrap items-center justify-center gap-4">

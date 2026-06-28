@@ -241,7 +241,7 @@ export default function ServiceCards3D() {
     <section className="bg-pit">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <SectionHeading
-          eyebrow="What We Build"
+          eyebrow="What I Build"
           title={
             <>
               Three disciplines. <em className="serif-accent">One standard.</em>
