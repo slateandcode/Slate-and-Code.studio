@@ -80,18 +80,22 @@ const fragment = /* glsl */ `
     lum = clamp(lum, 0.0, 1.0);
     vec3 sky = mix(vec3(0.02, 0.02, 0.025), vec3(0.96, 0.96, 0.97), lum);
 
-    // Mountain range that rolls like a slow wave: stacked noise octaves drift
-    // horizontally (bumps travel across) while large sine swells raise and
-    // lower the whole silhouette over time. Valley dip stays in the centre.
+    // Mountain range: rough, jagged silhouette with a valley dip in the centre.
+    // A smooth base swell carries the overall form; stacked *ridged* noise
+    // octaves (abs-folded -> angular crests) add the sharp edges, weighted
+    // toward the sides so the valley behind the title stays clear. Octaves
+    // drift horizontally + a sine swell rolls it, so the wave stays alive.
     float edge = clamp(abs(uv.x - 0.5) * 2.0, 0.0, 1.0);
     float rt = uTime * 0.05;
-    float ridge = 0.10 + 0.30 * pow(edge, 1.25);
-    ridge += 0.10 * vnoise(vec2(uv.x * 2.2 + 7.0 + rt * 0.6, 1.3 + rt * 0.3));
-    ridge += 0.06 * vnoise(vec2(uv.x * 5.5 + 20.0 - rt * 0.9, 3.7 + rt * 0.25));
-    ridge += 0.035 * vnoise(vec2(uv.x * 13.0 + 41.0 + rt * 1.3, 9.1 + rt * 0.2));
-    ridge += 0.030 * sin(uv.x * 3.0 + uTime * 0.35);
-    ridge += 0.020 * sin(uv.x * 6.5 - uTime * 0.50 + 1.5);
-    float m = smoothstep(ridge, ridge + 0.004, uv.y); // 0 = mountain, 1 = sky
+    float rough = 0.45 + 0.55 * edge; // calmer valley, jaggier peaks
+
+    float ridge = 0.09 + 0.28 * pow(edge, 1.25);
+    ridge += 0.08 * vnoise(vec2(uv.x * 2.4 + 7.0 + rt * 0.6, 1.3 + rt * 0.3));
+    ridge += rough * 0.090 * (1.0 - abs(2.0 * vnoise(vec2(uv.x * 6.5 + 20.0 - rt * 0.9, 3.7)) - 1.0));
+    ridge += rough * 0.055 * (1.0 - abs(2.0 * vnoise(vec2(uv.x * 13.0 + 41.0 + rt * 1.2, 9.1)) - 1.0));
+    ridge += rough * 0.032 * (1.0 - abs(2.0 * vnoise(vec2(uv.x * 26.0 + 61.0 + rt * 1.7, 5.0)) - 1.0));
+    ridge += 0.022 * sin(uv.x * 3.0 + uTime * 0.35);
+    float m = smoothstep(ridge, ridge + 0.0035, uv.y); // 0 = mountain, 1 = sky
 
     vec3 col = mix(vec3(0.0), sky, m);
     gl_FragColor = vec4(col, 1.0);
@@ -138,6 +142,19 @@ export default function WaveBackground({ className = "" }: { className?: string 
       const gl = renderer.gl;
       gl.clearColor(0.035, 0.035, 0.035, 1);
 
+      // If the GPU drops the context after init (memory pressure on mobile,
+      // backgrounding, a GPU reset), stop the loop and show the CSS fallback
+      // instead of rendering forever on a dead context.
+      const onContextLost = (e: Event) => {
+        e.preventDefault();
+        if (raf) {
+          cancelAnimationFrame(raf);
+          raf = 0;
+        }
+        if (mounted) setFailed(true);
+      };
+      canvas.addEventListener("webglcontextlost", onContextLost as EventListener);
+
       const program = new Program(gl, {
         vertex,
         fragment,
@@ -161,6 +178,7 @@ export default function WaveBackground({ className = "" }: { className?: string 
       ro.observe(canvas.parentElement || canvas);
 
       const render = (seconds: number, mouse: number[]) => {
+        if (gl.isContextLost()) return;
         program.uniforms.uTime.value = seconds;
         program.uniforms.uMouse.value = mouse;
         renderer.render({ scene: mesh });
@@ -171,6 +189,7 @@ export default function WaveBackground({ className = "" }: { className?: string 
         render(6.0, [0.5, 0.5]);
         cleanup = () => {
           ro.disconnect();
+          canvas.removeEventListener("webglcontextlost", onContextLost as EventListener);
           gl.getExtension("WEBGL_lose_context")?.loseContext();
         };
         return;
@@ -216,9 +235,14 @@ export default function WaveBackground({ className = "" }: { className?: string 
         ro.disconnect();
         io.disconnect();
         window.removeEventListener("pointermove", onMove);
+        canvas.removeEventListener("webglcontextlost", onContextLost as EventListener);
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       };
-    })();
+    })().catch(() => {
+      // Dynamic import failed (offline, CDN hiccup, stale chunk) or init threw
+      // before its own try/catch, fall back to the CSS gradient.
+      if (mounted) setFailed(true);
+    });
 
     return () => {
       mounted = false;

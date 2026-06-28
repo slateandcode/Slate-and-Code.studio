@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { SITE } from "@/lib/site";
+import { SITE, SERVICE_NAMES, BUDGETS } from "@/lib/site";
 
 export const runtime = "nodejs";
 
 /* Best-effort, per-instance rate limit. Serverless instances don't share
-   memory, so this isn't bulletproof — it's a cheap first line alongside the
+   memory, so this isn't bulletproof, it's a cheap first line alongside the
    honeypot. Swap for a shared store (e.g. Upstash) if abuse becomes real. */
 const WINDOW_MS = 60_000;
 const MAX_PER_WINDOW = 5;
@@ -20,26 +20,51 @@ function rateLimited(ip: string) {
 
 const isEmail = (s: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
 
+// Coerce any JSON value to a trimmed string, so a bot sending a number, array,
+// or object can never throw a TypeError before validation runs.
+const str = (v: unknown) => (typeof v === "string" ? v.trim() : "");
+// Collapse CR/LF so a value placed in the subject can't fake extra lines.
+const oneLine = (s: string) => s.replace(/[\r\n]+/g, " ").trim();
+
+// Per-field caps: roomy for a real inquiry, tight enough to stop inbox floods.
+const LIMITS = {
+  name: 120,
+  business: 160,
+  email: 200,
+  instagram: 80,
+  message: 5000,
+} as const;
+
 export async function POST(req: Request) {
-  let data: Record<string, string>;
+  // Reject oversized bodies up front (everything below is concatenated into an email).
+  if (Number(req.headers.get("content-length") ?? 0) > 16_000) {
+    return NextResponse.json({ error: "Request too large." }, { status: 413 });
+  }
+
+  let data: Record<string, unknown>;
   try {
-    data = await req.json();
+    const parsed = await req.json();
+    if (!parsed || typeof parsed !== "object") throw new Error("not an object");
+    data = parsed as Record<string, unknown>;
   } catch {
     return NextResponse.json({ error: "Invalid request." }, { status: 400 });
   }
 
-  // Honeypot — real visitors never fill this. Pretend success so bots move on.
-  if (data.company_url) {
+  // Honeypot, real visitors never fill this. Log so a false positive (e.g. an
+  // autofill extension hitting a real prospect) is visible instead of a
+  // silently dropped lead, then pretend success so bots move on.
+  if (str(data.company_url)) {
+    console.warn("Contact honeypot tripped; submission dropped.");
     return NextResponse.json({ ok: true });
   }
 
-  const name = (data.name ?? "").trim();
-  const business = (data.business ?? "").trim();
-  const email = (data.email ?? "").trim();
-  const instagram = (data.instagram ?? "").trim();
-  const service = (data.service ?? "").trim();
-  const budget = (data.budget ?? "").trim();
-  const message = (data.message ?? "").trim();
+  const name = str(data.name);
+  const business = str(data.business);
+  const email = str(data.email);
+  const instagram = str(data.instagram);
+  const service = str(data.service);
+  const budget = str(data.budget);
+  const message = str(data.message);
 
   if (!name || !business || !email || !service || !budget || !message) {
     return NextResponse.json(
@@ -50,8 +75,24 @@ export async function POST(req: Request) {
   if (!isEmail(email)) {
     return NextResponse.json({ error: "Please enter a valid email." }, { status: 400 });
   }
-  if (message.length > 5000) {
-    return NextResponse.json({ error: "Message is too long." }, { status: 400 });
+  if (
+    name.length > LIMITS.name ||
+    business.length > LIMITS.business ||
+    email.length > LIMITS.email ||
+    instagram.length > LIMITS.instagram ||
+    message.length > LIMITS.message
+  ) {
+    return NextResponse.json({ error: "One of the fields is too long." }, { status: 400 });
+  }
+  // Service and budget must be real menu values, not arbitrary free text.
+  if (
+    !(SERVICE_NAMES as readonly string[]).includes(service) ||
+    !(BUDGETS as readonly string[]).includes(budget)
+  ) {
+    return NextResponse.json(
+      { error: "Please pick a service and budget from the list." },
+      { status: 400 },
+    );
   }
 
   const ip =
@@ -89,6 +130,9 @@ export async function POST(req: Request) {
     message,
   ].join("\n");
 
+  // Abort a hung upstream instead of holding the request open indefinitely.
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
   try {
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -100,9 +144,10 @@ export async function POST(req: Request) {
         from,
         to,
         reply_to: email,
-        subject: `New inquiry: ${service} — ${name}`,
+        subject: oneLine(`New inquiry: ${service} · ${name}`),
         text,
       }),
+      signal: controller.signal,
     });
     if (!res.ok) {
       console.error("Resend error:", res.status, await res.text());
@@ -117,6 +162,8 @@ export async function POST(req: Request) {
       { error: "Could not send your inquiry. Please try again." },
       { status: 502 },
     );
+  } finally {
+    clearTimeout(timer);
   }
 
   return NextResponse.json({ ok: true });

@@ -65,6 +65,41 @@ export default function RedesignSlider() {
     setFromClientX(e.clientX);
   };
 
+  const markInteracted = () => {
+    if (interactedRef.current) return;
+    interactedRef.current = true;
+    setInteracted(true);
+    hintRef.current?.stop();
+  };
+
+  // Keyboard control so the demo isn't drag-only (WCAG 2.1.1). Arrows nudge,
+  // Shift+Arrow jumps, Home/End snap to the clamped bounds.
+  const onHandleKeyDown = (e: React.KeyboardEvent) => {
+    const step = e.shiftKey ? 10 : 2;
+    let next: number;
+    switch (e.key) {
+      case "ArrowLeft":
+      case "ArrowDown":
+        next = pct - step;
+        break;
+      case "ArrowRight":
+      case "ArrowUp":
+        next = pct + step;
+        break;
+      case "Home":
+        next = 12;
+        break;
+      case "End":
+        next = 88;
+        break;
+      default:
+        return;
+    }
+    e.preventDefault();
+    markInteracted();
+    setPct(Math.min(88, Math.max(12, next)));
+  };
+
   return (
     <div
       ref={ref}
@@ -158,7 +193,15 @@ export default function RedesignSlider() {
         {/* Circular node, centered on the line by auto-margins */}
         <div
           data-handle
-          className="absolute inset-0 m-auto flex h-6 w-6 items-center justify-center rounded-full border border-gold/70 bg-pit shadow-[0_2px_10px_rgba(0,0,0,0.55)] [touch-action:none]"
+          role="slider"
+          tabIndex={0}
+          aria-label="Compare before and after"
+          aria-orientation="horizontal"
+          aria-valuemin={12}
+          aria-valuemax={88}
+          aria-valuenow={Math.round(pct)}
+          onKeyDown={onHandleKeyDown}
+          className="absolute inset-0 m-auto flex h-6 w-6 items-center justify-center rounded-full border border-gold/70 bg-pit shadow-[0_2px_10px_rgba(0,0,0,0.55)] [touch-action:none] before:absolute before:-inset-3 before:content-[''] focus:outline-none focus-visible:ring-2 focus-visible:ring-gold/80 focus-visible:ring-offset-2 focus-visible:ring-offset-pit"
         >
           {/* Line redrawn through the node so the chevron sits within it */}
           <span className="pointer-events-none absolute inset-x-0 inset-y-0 mx-auto w-0.5 bg-gold/80" />

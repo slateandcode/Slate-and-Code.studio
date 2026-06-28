@@ -2,17 +2,9 @@
 
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
-import { SITE, SERVICE_NAMES } from "@/lib/site";
+import { SITE, SERVICE_NAMES, BUDGETS } from "@/lib/site";
 
 const SERVICES = SERVICE_NAMES;
-
-const BUDGETS = [
-  "Under 2,000 AED",
-  "2,000–4,000 AED",
-  "4,000–8,000 AED",
-  "8,000+ AED",
-  "Not sure yet",
-];
 
 const inputCls =
   "h-12 w-full rounded-lg border border-line bg-well px-4 text-sm text-ivory placeholder:text-fog/55 transition-colors duration-300 focus:border-gold/55 focus:outline-none";
@@ -101,8 +93,8 @@ export default function ContactForm() {
           Your inquiry is in.
         </h3>
         <p className="mt-3 max-w-sm text-sm leading-relaxed text-fog">
-          Thanks for reaching out. We&apos;ll get back to you soon. For the
-          fastest reply, message us on Instagram at{" "}
+          Thanks for reaching out. I&apos;ll get back to you soon. For the
+          fastest reply, message me on Instagram at{" "}
           <a
             href={SITE.instagramUrl}
             target="_blank"
@@ -129,25 +121,25 @@ export default function ContactForm() {
           <label htmlFor="name" className={labelCls}>
             Name
           </label>
-          <input id="name" name="name" required autoComplete="name" placeholder="Your name" className={inputCls} />
+          <input id="name" name="name" required maxLength={120} autoComplete="name" placeholder="Your name" className={inputCls} />
         </div>
         <div>
           <label htmlFor="business" className={labelCls}>
             Business / brand
           </label>
-          <input id="business" name="business" required placeholder="Company or brand name" className={inputCls} />
+          <input id="business" name="business" required maxLength={160} placeholder="Company or brand name" className={inputCls} />
         </div>
         <div>
           <label htmlFor="email" className={labelCls}>
             Email
           </label>
-          <input id="email" name="email" type="email" required autoComplete="email" placeholder="you@company.com" className={inputCls} />
+          <input id="email" name="email" type="email" required maxLength={200} autoComplete="email" placeholder="you@company.com" className={inputCls} />
         </div>
         <div>
           <label htmlFor="instagram" className={labelCls}>
             Instagram handle
           </label>
-          <input id="instagram" name="instagram" placeholder="@yourbrand" className={inputCls} />
+          <input id="instagram" name="instagram" maxLength={80} placeholder="@yourbrand" className={inputCls} />
         </div>
         <div className="relative">
           <label htmlFor="service" className={labelCls}>
@@ -193,6 +185,7 @@ export default function ContactForm() {
             id="message"
             name="message"
             required
+            maxLength={5000}
             rows={5}
             placeholder="What are you building, and what should it do for the business?"
             className={`${inputCls} h-auto resize-none py-3.5 leading-relaxed`}
@@ -210,9 +203,9 @@ export default function ContactForm() {
         <p className="mt-6 rounded-lg border border-[#5a2e2e] bg-[#1c1413] px-4 py-3 text-[13px] leading-relaxed text-[#e9b9b0]">
           Something went wrong sending that. You can{" "}
           <a href={mailto} className="font-semibold text-ivory underline underline-offset-2">
-            email us directly
+            email me directly
           </a>{" "}
-          or message us on Instagram at{" "}
+          or message me on Instagram at{" "}
           <a
             href={SITE.instagramUrl}
             target="_blank"
@@ -233,8 +226,8 @@ export default function ContactForm() {
         {submitting ? "Sending…" : "Send inquiry"}
       </button>
       <p className="mt-4 text-xs leading-relaxed text-fog/80">
-        We&apos;ll reply by email. Prefer DMs? Instagram is the fastest way to
-        reach us.
+        I&apos;ll reply by email. Prefer DMs? Instagram is the fastest way to
+        reach me.
       </p>
     </form>
   );
