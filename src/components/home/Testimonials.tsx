@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
 import Reveal from "@/components/Reveal";
 import SectionHeading from "@/components/SectionHeading";
 import SpotlightCard from "@/components/SpotlightCard";
@@ -62,24 +65,88 @@ function TestimonialCard({ t }: { t: Testimonial }) {
 }
 
 export default function Testimonials() {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  // Track the centred card on phone so the dots reflect swipe position.
+  // Below lg the track is a horizontal snap carousel; at lg+ it is a 3-up
+  // grid and the dots are hidden, so this observer is harmless there.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+    const cards = Array.from(
+      track.querySelectorAll<HTMLElement>("[data-card]"),
+    );
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setActive(Number((entry.target as HTMLElement).dataset.index));
+          }
+        }
+      },
+      { root: track, threshold: 0.6 },
+    );
+    cards.forEach((card) => io.observe(card));
+    return () => io.disconnect();
+  }, []);
+
+  const scrollTo = (i: number) => {
+    const card = trackRef.current?.querySelector<HTMLElement>(
+      `[data-index="${i}"]`,
+    );
+    card?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  };
+
   return (
     <section className="border-t border-line bg-ink">
       <div className="mx-auto max-w-6xl px-5 py-24 sm:px-8 lg:py-32">
         <SectionHeading
           title={
             <>
-              Don&apos;t take our word for it,{" "}
+              Don&apos;t take my word for it,{" "}
               <em className="serif-accent">take theirs</em>.
             </>
           }
           lead="A few words from the businesses behind the work above."
         />
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {/* Phone: horizontal swipe carousel with a peek of the next card.
+            lg+: even 3-up grid. */}
+        <div
+          ref={trackRef}
+          role="group"
+          aria-roledescription="carousel"
+          aria-label="Client testimonials"
+          className="mt-14 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-smooth pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-3 lg:snap-none lg:overflow-visible lg:pb-0"
+        >
           {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={(i % 3) * 0.1}>
-              <TestimonialCard t={t} />
-            </Reveal>
+            <div
+              key={t.name}
+              data-card
+              data-index={i}
+              className="w-[85%] shrink-0 snap-center sm:w-[60%] lg:w-auto lg:shrink"
+            >
+              <Reveal delay={(i % 3) * 0.1}>
+                <TestimonialCard t={t} />
+              </Reveal>
+            </div>
+          ))}
+        </div>
+
+        {/* Position dots, phone/tablet only. */}
+        <div className="mt-7 flex justify-center gap-2 lg:hidden">
+          {TESTIMONIALS.map((t, i) => (
+            <button
+              key={t.name}
+              type="button"
+              onClick={() => scrollTo(i)}
+              aria-label={`Show testimonial ${i + 1} of ${TESTIMONIALS.length}: ${t.name}`}
+              aria-current={i === active}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === active ? "w-5 bg-gold" : "w-1.5 bg-fog/40 hover:bg-fog/70"
+              }`}
+            />
           ))}
         </div>
       </div>

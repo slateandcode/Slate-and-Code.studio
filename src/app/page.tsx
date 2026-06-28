@@ -12,10 +12,10 @@ export default function HomePage() {
     <>
       <Hero />
       <SelectedWork />
-      <ServiceCards3D />
       <Process />
-      <Testimonials />
+      <ServiceCards3D />
       <About />
+      <Testimonials />
       <Convergence />
       <CtaSection />
     </>
