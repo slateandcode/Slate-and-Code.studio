@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FormEvent,
+} from "react";
 import { cubic, EASE_OUT } from "@/lib/anim";
 import { LINKS } from "@/lib/links";
 import {
   BUDGET_GROUPS,
-  BUDGET_OTHER,
   HONEYPOT,
   LIMITS,
   TIMELINES,
   inquiryBody,
   inquirySubject,
   type Inquiry,
-  type Option,
 } from "@/lib/inquiry";
+import Listbox from "./Listbox";
 
 /*
   The form on the /contact page: micro labels over underline fields and the
@@ -32,59 +37,22 @@ const FIELD =
 
 const LABEL = "micro mb-[0.4em] block text-[var(--fg-70)]";
 
+const TIMELINE_GROUPS = [
+  { options: TIMELINES.map((t) => ({ value: t, label: t })) },
+];
+
+/* The project field starts one line tall, like the fields around it, so its
+   placeholder sits on the underline instead of floating at the top of an
+   empty box, and grows with what is typed, up to a cap where it scrolls. */
+function fitToContent(el: HTMLTextAreaElement | null) {
+  if (!el) return;
+  el.style.height = "auto";
+  /* scrollHeight leaves out the underline, so add the border back */
+  el.style.height = `${el.scrollHeight + el.offsetHeight - el.clientHeight}px`;
+}
+
 const BUTTON_FACE =
   "flex items-center gap-[0.9em] px-[clamp(18px,1.5vw,32px)] py-[clamp(11px,0.85vw,18px)] text-[length:var(--fs-small)] font-medium tracking-[-0.01em]";
-
-/* a native select in the field dress: the underline, the caret, and the
-   site's arrow in place of the browser's chevron */
-function Select({
-  id,
-  name,
-  placeholder,
-  groups = [],
-  options = [],
-}: {
-  id: string;
-  name: string;
-  placeholder: string;
-  groups?: { label: string; options: Option[] }[];
-  options?: Option[];
-}) {
-  return (
-    <span className="relative block">
-      <select
-        id={id}
-        name={name}
-        defaultValue=""
-        className={`${FIELD} appearance-none pr-[1.6em] [&:has(option[value='']:checked)]:text-[var(--fg-28)] [&_optgroup]:bg-[var(--color-ink)] [&_optgroup]:text-[var(--color-paper)] [&_option]:bg-[var(--color-ink)] [&_option]:text-[var(--color-paper)]`}
-      >
-        <option value="" disabled>
-          {placeholder}
-        </option>
-        {groups.map((g) => (
-          <optgroup key={g.label} label={g.label}>
-            {g.options.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>
-            {o.label}
-          </option>
-        ))}
-      </select>
-      <span
-        aria-hidden
-        className="pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 text-[length:var(--fs-body)] text-[var(--fg-70)]"
-      >
-        &#8595;
-      </span>
-    </span>
-  );
-}
 
 function mailtoFor(inquiry: Inquiry) {
   return `mailto:${LINKS.email}?subject=${encodeURIComponent(
@@ -102,7 +70,16 @@ type Status =
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const doneRef = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
   const id = (field: string) => `contact-${field}`;
+
+  /* sized before paint, so the field never shows at the browser default */
+  useLayoutEffect(() => {
+    fitToContent(messageRef.current);
+    const onResize = () => fitToContent(messageRef.current);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [status.kind]);
 
   /* the submit button is gone once sent, so focus moves to the confirmation
      rather than falling back to the top of the document */
@@ -223,36 +200,49 @@ export default function ContactForm() {
             Project
           </label>
           <textarea
+            ref={messageRef}
             id={id("message")}
             name="message"
             required
-            rows={4}
+            rows={1}
             maxLength={LIMITS.message}
             placeholder="What are you making, and what should it do?"
-            className={`${FIELD} resize-none`}
+            onInput={(e) => fitToContent(e.currentTarget)}
+            className={`${FIELD} block max-h-[16em] resize-none overflow-y-auto leading-[1.45]`}
           />
         </div>
         <div>
-          <label htmlFor={id("budget")} className={LABEL}>
+          <label
+            id={id("budget-label")}
+            htmlFor={id("budget")}
+            className={LABEL}
+          >
             Budget
           </label>
-          <Select
+          <Listbox
             id={id("budget")}
             name="budget"
+            labelId={id("budget-label")}
             groups={BUDGET_GROUPS}
-            options={BUDGET_OTHER}
             placeholder="Pick a range"
+            fieldClassName={FIELD}
           />
         </div>
         <div>
-          <label htmlFor={id("timeline")} className={LABEL}>
+          <label
+            id={id("timeline-label")}
+            htmlFor={id("timeline")}
+            className={LABEL}
+          >
             Timeline
           </label>
-          <Select
+          <Listbox
             id={id("timeline")}
             name="timeline"
-            options={TIMELINES.map((t) => ({ value: t, label: t }))}
+            labelId={id("timeline-label")}
+            groups={TIMELINE_GROUPS}
             placeholder="When does it need to exist?"
+            fieldClassName={FIELD}
           />
         </div>
       </div>

@@ -4,49 +4,54 @@
    The budget bands are the /services tiers, worded off the same data as the
    cards. Tiers with a monthly figure are offered both ways, grouped by how
    they would be paid, so the choice doubles as the billing preference. The
-   custom quote is quoted either way and sits outside the groups. */
+   custom quote is quoted either way and sits in an unnamed group after them. */
 
-import { PACKAGES, priceText } from "./services";
+import { PACKAGES, priceText, type Price } from "./services";
 
-export type Option = { value: string; label: string };
+export type Option = {
+  value: string;
+  label: string;
+  /* small text set on the right of the row: the price */
+  hint?: string;
+};
 
-const lower = (s: string) => s.toLowerCase();
+export type OptionGroup = { label?: string; options: Option[] };
 
-export const BUDGET_GROUPS: { label: string; options: Option[] }[] = [
+/* "From $150 per month" reads long in a narrow list; "/mo" says the same */
+const hint = (p: Price) => priceText(p).replace(" per month", "/mo");
+
+export const BUDGET_GROUPS: OptionGroup[] = [
   {
     label: "One-time",
     options: PACKAGES.filter((p) => p.monthly).map((p) => ({
       value: `${p.name}, one-time`,
-      label: `${p.name}, ${lower(priceText(p))}`,
+      label: p.name,
+      hint: hint(p),
     })),
   },
   {
     label: "Monthly",
     options: PACKAGES.flatMap((p) =>
       p.monthly
-        ? [
-            {
-              value: `${p.name}, monthly`,
-              label: `${p.name}, ${lower(priceText(p.monthly))}`,
-            },
-          ]
+        ? [{ value: `${p.name}, monthly`, label: p.name, hint: hint(p.monthly) }]
         : []
     ),
   },
+  {
+    options: [
+      ...PACKAGES.filter((p) => !p.monthly).map((p) => ({
+        value: p.name,
+        label: p.name,
+        hint: priceText(p),
+      })),
+      { value: "Not sure yet", label: "Not sure yet" },
+    ],
+  },
 ];
 
-export const BUDGET_OTHER: Option[] = [
-  ...PACKAGES.filter((p) => !p.monthly).map((p) => ({
-    value: p.name,
-    label: `${p.name}, ${lower(priceText(p))}`,
-  })),
-  { value: "Not sure yet", label: "Not sure yet" },
-];
-
-export const BUDGET_VALUES = [
-  ...BUDGET_GROUPS.flatMap((g) => g.options),
-  ...BUDGET_OTHER,
-].map((o) => o.value);
+export const BUDGET_VALUES = BUDGET_GROUPS.flatMap((g) => g.options).map(
+  (o) => o.value
+);
 
 export const TIMELINES = [
   "As soon as possible",
