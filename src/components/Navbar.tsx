@@ -8,6 +8,29 @@ import { EASE_HOUSE } from "@/lib/anim";
 import { scrollToTarget } from "@/lib/lenis";
 import { TEXT_LINK as ITEM, TEXT_LINK_RULE as RULE } from "@/lib/ui";
 
+/* the Contact pill. On the contact page itself it stays filled, marking
+   where you are. */
+function ContactPill({ current, className }: { current: boolean; className: string }) {
+  return (
+    <Link
+      href="/contact"
+      aria-current={current ? "page" : undefined}
+      className={`micro group relative overflow-hidden rounded-full border transition-colors duration-[450ms] hover:border-accent hover:text-white ${className} ${
+        current
+          ? "border-accent text-white"
+          : "border-[var(--rule)] text-[var(--fg)]"
+      }`}
+    >
+      <span className="relative z-10">Contact</span>
+      <span
+        className={`absolute inset-0 origin-bottom bg-accent transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 ${
+          current ? "scale-y-100" : "scale-y-0"
+        }`}
+      />
+    </Link>
+  );
+}
+
 export default function Navbar() {
   const [stuck, setStuck] = useState(false);
   const pathname = usePathname();
@@ -67,42 +90,18 @@ export default function Navbar() {
         {/*
           Contact sits on the exact centre line of the page: it is the only
           in-flow child of this wrapper, so the -translate-x-1/2 centres the
-          pill itself rather than the pill plus the links. Work and Services
+          pill itself rather than the pill plus the links. Portfolio and Services
           then hang off its right edge with `left-full`, which keeps them
           close to it instead of pushed out to the page margin.
         */}
-        <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center">
-          {/* on the contact page itself the pill stays filled, marking where
-              you are the way the accent rule marks Work and Services */}
-          <Link
-            href="/contact"
-            aria-current={onContact ? "page" : undefined}
-            className={`micro group relative overflow-hidden rounded-full border px-[1.5em] py-[0.85em] transition-colors duration-[450ms] hover:border-accent hover:text-white ${
-              onContact
-                ? "border-accent text-white"
-                : "border-[var(--rule)] text-[var(--fg)]"
-            }`}
-          >
-            <span className="relative z-10">Contact</span>
-            <span
-              className={`absolute inset-0 origin-bottom bg-accent transition-transform duration-[450ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 ${
-                onContact ? "scale-y-100" : "scale-y-0"
-              }`}
-            />
-          </Link>
+        <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center sm:flex">
+          <ContactPill current={onContact} className="px-[1.5em] py-[0.85em]" />
 
-          <nav className="absolute left-full ml-[clamp(18px,2.2vw,46px)] hidden items-center gap-[clamp(16px,1.9vw,38px)] sm:flex">
-            {onHome ? (
-              <button onClick={() => scrollToTarget("#work")} className={ITEM}>
-                Work
-                <span className={RULE} />
-              </button>
-            ) : (
-              <Link href="/#work" className={ITEM}>
-                Work
-                <span className={RULE} />
-              </Link>
-            )}
+          <nav className="absolute left-full ml-[clamp(18px,2.2vw,46px)] flex items-center gap-[clamp(16px,1.9vw,38px)]">
+            <Link href="/portfolio" className={ITEM}>
+              Portfolio
+              <span className={RULE} />
+            </Link>
             <Link href="/services" className={ITEM}>
               Services
               <span className={RULE} />
@@ -110,24 +109,18 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* phones: no room to hang off the pill, so the same two links sit
-            on the right edge of the bar instead */}
+        {/* phones: no room for a centred pill with Portfolio hanging off it,
+            so the links and the pill sit together on the right edge */}
         <nav className="ml-auto flex items-center gap-[1.2em] sm:hidden">
-          {onHome ? (
-            <button onClick={() => scrollToTarget("#work")} className={ITEM}>
-              Work
-              <span className={RULE} />
-            </button>
-          ) : (
-            <Link href="/#work" className={ITEM}>
-              Work
-              <span className={RULE} />
-            </Link>
-          )}
+          <Link href="/portfolio" className={ITEM}>
+            Portfolio
+            <span className={RULE} />
+          </Link>
           <Link href="/services" className={ITEM}>
             Services
             <span className={RULE} />
           </Link>
+          <ContactPill current={onContact} className="px-[1.2em] py-[0.8em]" />
         </nav>
       </div>
     </motion.header>

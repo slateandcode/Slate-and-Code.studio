@@ -14,6 +14,7 @@ npm run build
 ## Routes
 
 - `src/app/page.tsx` — hero, manifesto, work strip, CTA, process, about, footer
+- `src/app/portfolio/page.tsx` — every project, with a line on each and its live link
 - `src/app/services/page.tsx` — services, packages (one-time / monthly), FAQ
 - `src/app/contact/page.tsx` — the contact page every Contact button leads to
 - `src/app/api/contact/route.ts` — sends the contact form through Resend
@@ -24,6 +25,8 @@ npm run build
 - `src/lib/site.ts` — public origin and the share card. Everything's metadata
   builds off it, so the og:image resolves absolutely.
 - `src/lib/links.ts` — every external link, including the inbox address.
+- `src/lib/work.ts` — the projects, shared by the home work strip and the
+  portfolio page. A project without `href` shows as in progress.
 - `src/lib/services.ts` — the service tiers with their one-time and monthly
   prices.
 - `src/lib/inquiry.ts` — the contact form's budget and timeline options, which

@@ -21,10 +21,9 @@ const FS = `calc((100vw - var(--edge) * 2) / ${SET_WIDTH.wordmark})`;
 const MARK_H = `calc(${FS} * 0.9)`;
 const BAND_H = `calc(${MARK_H} / ${BANDS})`;
 
-/* mirrors the navbar: Work is an anchor on the home page, Services and
-   Contact are routes */
+/* mirrors the navbar, plus Studio, which is an anchor on the home page */
 const NAV = [
-  { label: "Work", href: "/#work", target: "#work" },
+  { label: "Portfolio", href: "/portfolio", target: null },
   { label: "Studio", href: "/#about", target: "#about" },
   { label: "Services", href: "/services", target: null },
   { label: "Contact", href: "/contact", target: null },

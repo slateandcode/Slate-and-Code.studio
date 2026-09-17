@@ -18,6 +18,7 @@ export const SET_WIDTH = {
   process: 7.337, //   HOW THE PROCESS FLOWS
   about: 5.38, //    ABOUT THE STUDIO
   work: 4.526, //     SELECTED WORK
+  portfolio: 3.049, // PORTFOLIO
 } as const;
 
 /* font-size that makes a line of `em` set-width fill the page gutters. */

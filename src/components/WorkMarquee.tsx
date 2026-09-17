@@ -11,80 +11,15 @@ import {
   type WheelEvent,
 } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { cubic, EASE_OUT } from "@/lib/anim";
 import { TEXT_LINK, TEXT_LINK_RULE } from "@/lib/ui";
+import { WORKS } from "@/lib/work";
+
+/* the curated selection; the portfolio page carries the rest */
+const STRIP = WORKS.filter((w) => w.strip !== false);
 import { MaskReveal } from "./reveal";
-
-type Work = {
-  src: string;
-  name: string;
-  /* the live site; absent when there is nothing public to point at */
-  href?: string;
-  alt: string;
-};
-
-const WORKS: Work[] = [
-  {
-    src: "/work/crescent-car-check.webp",
-    name: "Crescent Car Check",
-    href: "https://crescentcarcheck.com/",
-    alt: "Crescent Car Check website. The hero reads 'Book the UAE's best pre-purchase car inspection' beside a branded inspection van.",
-  },
-  {
-    src: "/work/voidform.webp",
-    name: "VoidForm",
-    href: "https://voidform-seven.vercel.app/",
-    alt: "VoidForm website. A blue hero with an outlined 'Developing' marquee running over the silhouette of a film camera.",
-  },
-  {
-    src: "/work/norhus-real-estate.webp",
-    name: "Nørhus Real Estate",
-    href: "https://norhus-real-estate.vercel.app/",
-    alt: "Nørhus Real Estate website. A black and cream hero with 'Real estate in Copenhagen' set along a curve.",
-  },
-  {
-    src: "/work/untold-archives.webp",
-    name: "Untold Archives",
-    href: "https://untoldarchives.com/",
-    alt: "Untold Archives website. A dark hero with an old television showing 'Welcome to the archives'.",
-  },
-  {
-    src: "/work/perch.webp",
-    name: "Perch Website Tracker",
-    href: "https://perch-website-tracker.vercel.app/",
-    alt: "Perch Website Tracker landing page. The headline reads 'Check your analytics without the maze' above a dashboard preview.",
-  },
-  {
-    src: "/work/kairos-k01.webp",
-    name: "Kairos Watch",
-    href: "https://kairos-watch.vercel.app/",
-    alt: "Kairos Watch website. The K-01 watch face in close-up on a dark hero.",
-  },
-  {
-    src: "/work/superior-ink.webp",
-    name: "Superior Ink",
-    alt: "Superior Ink website. A third party logistics hero with stacked shipping cartons on a pallet.",
-  },
-  {
-    src: "/work/mubarak-auto.webp",
-    name: "Mubarak Auto",
-    href: "https://mubarakauto.ae/",
-    alt: "Mubarak Auto website. The hero reads 'Premium auto parts at the best prices in UAE' next to the Mubarak Auto badge.",
-  },
-  {
-    src: "/work/discontinued.webp",
-    name: "Discontinued",
-    href: "https://discontinued-kappa.vercel.app/",
-    alt: "Discontinued website. An illustrated hero with a classic iPod and the line 'The most elegant that got lost'.",
-  },
-  {
-    src: "/work/virdis-supplement.webp",
-    name: "Virdis Supplement",
-    href: "https://virdis-supplement-demo.vercel.app/",
-    alt: "Virdis Supplement website. The Virdis wordmark in an italic serif with capsules floating around it.",
-  },
-];
 
 /* how much faster the track runs while the pointer is held down */
 const SKIM_MULTIPLIER = 24;
@@ -314,7 +249,7 @@ export default function WorkMarquee() {
   /* focus the next linked project in the given direction, wrapping; a tile
      with no live site is scrolled past, since there is nothing to open */
   const focusTile = (from: number, dir: 1 | -1) => {
-    const n = WORKS.length;
+    const n = STRIP.length;
     for (let step = 1; step <= n; step++) {
       const idx = (((from + dir * step) % n) + n) % n;
       const link = tileAt(idx)?.querySelector<HTMLElement>("a");
@@ -406,9 +341,15 @@ export default function WorkMarquee() {
             Selected Work
           </h2>
         </MaskReveal>
-        <span className="micro pb-[0.4em] text-[var(--fg-70)]">
-          {String(WORKS.length).padStart(2, "0")} Projects
-        </span>
+        {/* the count doubles as the way into the full portfolio */}
+        <Link
+          href="/portfolio"
+          className={`${TEXT_LINK} mb-[0.4em] inline-flex items-center gap-[0.6em]`}
+        >
+          All {String(WORKS.length).padStart(2, "0")} projects
+          <span aria-hidden>&#8599;</span>
+          <span className={TEXT_LINK_RULE} />
+        </Link>
       </div>
 
       <div
@@ -452,10 +393,10 @@ export default function WorkMarquee() {
             ref={trackRef}
             className="flex w-max gap-[clamp(10px,1.1vw,26px)] will-change-transform"
           >
-            {[...WORKS, ...WORKS].map((work, i) => {
+            {[...STRIP, ...STRIP].map((work, i) => {
               /* the second copy only exists so the loop is seamless: it is
                  invisible to readers and unreachable from the keyboard */
-              const ghost = i >= WORKS.length;
+              const ghost = i >= STRIP.length;
               return (
                 <div
                   key={i}

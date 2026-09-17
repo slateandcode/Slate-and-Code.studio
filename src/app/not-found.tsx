@@ -36,6 +36,10 @@ export default function NotFound() {
             Back to the studio
             <span className={TEXT_LINK_RULE} />
           </Link>
+          <Link href="/portfolio" className={`${TEXT_LINK} inline-flex min-h-[24px] items-center`}>
+            Portfolio
+            <span className={TEXT_LINK_RULE} />
+          </Link>
           <Link href="/services" className={`${TEXT_LINK} inline-flex min-h-[24px] items-center`}>
             Services
             <span className={TEXT_LINK_RULE} />
