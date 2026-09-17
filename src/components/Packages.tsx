@@ -1,8 +1,22 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useSpring, useTransform } from "motion/react";
-import { PACKAGES, PRICING_NOTES, type Package } from "@/lib/services";
+import { useEffect, useRef, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+} from "motion/react";
+import { EASE_HOUSE, EASE_OUT } from "@/lib/anim";
+import {
+  BILLING,
+  PACKAGES,
+  PRICING_NOTES,
+  priceOf,
+  type Billing,
+  type Package,
+} from "@/lib/services";
 import { MaskReveal } from "./reveal";
 
 /* ---------------------------------------------------------------------------
@@ -40,7 +54,17 @@ const PRICE_SIZE = "clamp(38px, 3.5vw, 76px)";
    The scope line is the counterweight to a starting price: "From $2,500" on
    its own reads as a floor, "From $2,500 / 5 to 12 pages" reads as a rate, and
    a larger brief can place itself above it instead of below. */
-function Head({ pack, index }: { pack: Package; index: number }) {
+function Head({
+  pack,
+  index,
+  billing,
+}: {
+  pack: Package;
+  index: number;
+  billing: Billing;
+}) {
+  const price = priceOf(pack, billing);
+
   return (
     <>
       <span className="micro text-[var(--fg-70)]">
@@ -53,18 +77,36 @@ function Head({ pack, index }: { pack: Package; index: number }) {
 
       <div className="mt-[clamp(14px,1.2vw,26px)]">
         <span className="micro block text-[var(--fg-70)]">
-          {pack.priceLead ?? " "}
+          {price.priceLead ?? " "}
         </span>
-        <span className="mt-[0.1em] flex flex-wrap items-baseline gap-x-[0.7em]">
-          <span
-            className="display whitespace-nowrap text-accent"
-            style={{ fontSize: PRICE_SIZE }}
-          >
-            {pack.price}
-          </span>
-          {pack.priceTail && (
-            <span className="micro text-[var(--fg-70)]">{pack.priceTail}</span>
-          )}
+
+        {/* on a billing switch the old figure rolls up out of a mask and the
+            new one rolls in under it. The mask is padded out and pulled back
+            by the same amount so Thunder's "$" is not clipped at 0.9 leading,
+            and the outgoing row is popped out of flow so the two never stack. */}
+        <span
+          className="relative -mb-[0.12em] -mt-[0.1em] block overflow-hidden py-[0.12em]"
+          style={{ fontSize: PRICE_SIZE }}
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={price.price}
+              className="flex flex-wrap items-baseline gap-x-[0.7rem]"
+              initial={{ y: "110%" }}
+              animate={{ y: "0%" }}
+              exit={{ y: "-110%" }}
+              transition={{ duration: 0.7, ease: [...EASE_HOUSE] }}
+            >
+              <span className="display whitespace-nowrap text-accent">
+                {price.price}
+              </span>
+              {price.priceTail && (
+                <span className="micro text-[var(--fg-70)]">
+                  {price.priceTail}
+                </span>
+              )}
+            </motion.span>
+          </AnimatePresence>
         </span>
 
         {/* the scope the figure buys, always emitted so the rule under it
@@ -77,20 +119,41 @@ function Head({ pack, index }: { pack: Package; index: number }) {
   );
 }
 
-function Includes({ items }: { items: string[] }) {
+const ITEM =
+  "flex items-baseline gap-[0.7em] text-[length:var(--fs-small)] leading-[1.4] text-[var(--fg-70)]";
+
+/* the build's list, then, when billed monthly, what the monthly fee adds.
+   The added lines carry the accent marker so they read as the difference
+   between the two modes rather than as a longer list. */
+function Includes({ items, extras }: { items: string[]; extras?: string[] }) {
   return (
     <ul className="flex flex-col gap-[0.62em]">
       {items.map((item) => (
-        <li
-          key={item}
-          className="flex items-baseline gap-[0.7em] text-[length:var(--fs-small)] leading-[1.4] text-[var(--fg-70)]"
-        >
+        <li key={item} className={ITEM}>
           {/* a marker, not information, so the item text carries all of it */}
           <span aria-hidden className="shrink-0 text-[var(--fg-28)]">
             +
           </span>
           <span>{item}</span>
         </li>
+      ))}
+      {extras?.map((item, i) => (
+        <motion.li
+          key={item}
+          className={ITEM}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.4,
+            delay: 0.15 + i * 0.06,
+            ease: [...EASE_OUT],
+          }}
+        >
+          <span aria-hidden className="shrink-0 text-accent">
+            +
+          </span>
+          <span>{item}</span>
+        </motion.li>
       ))}
     </ul>
   );
@@ -112,7 +175,15 @@ function Foot({ pack }: { pack: Package }) {
   );
 }
 
-function Card({ pack, index }: { pack: Package; index: number }) {
+function Card({
+  pack,
+  index,
+  billing,
+}: {
+  pack: Package;
+  index: number;
+  billing: Billing;
+}) {
   const ref = useRef<HTMLElement>(null);
 
   /* Same scroll-linked arrival the process rows use, so the two pages read as
@@ -154,7 +225,7 @@ function Card({ pack, index }: { pack: Package; index: number }) {
         className={`${CARD} lg:col-span-3 lg:grid lg:grid-cols-3 lg:grid-rows-[1fr_auto] lg:gap-x-[clamp(20px,2.4vw,64px)]`}
       >
         <div className="flex flex-col lg:col-start-1 lg:row-span-2 lg:row-start-1">
-          <Head pack={pack} index={index} />
+          <Head pack={pack} index={index} billing={billing} />
         </div>
 
         <p className="mt-[clamp(18px,1.5vw,34px)] max-w-[46ch] border-t border-[var(--rule)] pt-[clamp(16px,1.4vw,30px)] text-[length:var(--fs-body)] leading-[1.42] text-[var(--fg-70)] lg:col-start-2 lg:row-start-1 lg:mt-0 lg:border-t-0 lg:pt-0">
@@ -162,7 +233,10 @@ function Card({ pack, index }: { pack: Package; index: number }) {
         </p>
 
         <div className="mt-[clamp(18px,1.5vw,32px)] lg:col-start-3 lg:row-span-2 lg:row-start-1 lg:mt-0">
-          <Includes items={pack.includes} />
+          <Includes
+            items={pack.includes}
+            extras={billing === "monthly" ? pack.monthly?.includes : undefined}
+          />
         </div>
 
         <div className="lg:col-start-2 lg:row-start-2">
@@ -174,14 +248,17 @@ function Card({ pack, index }: { pack: Package; index: number }) {
 
   return (
     <motion.article ref={ref} style={motionStyle} className={CARD}>
-      <Head pack={pack} index={index} />
+      <Head pack={pack} index={index} billing={billing} />
 
       <p className="mt-[clamp(18px,1.5vw,34px)] border-t border-[var(--rule)] pt-[clamp(16px,1.4vw,30px)] text-[length:var(--fs-body)] leading-[1.42] text-[var(--fg-70)]">
         {pack.summary}
       </p>
 
       <div className="mt-[clamp(18px,1.5vw,32px)]">
-        <Includes items={pack.includes} />
+        <Includes
+          items={pack.includes}
+          extras={billing === "monthly" ? pack.monthly?.includes : undefined}
+        />
       </div>
 
       {/* pushes the foot to the bottom edge so card feet line up across the row */}
@@ -192,7 +269,88 @@ function Card({ pack, index }: { pack: Package; index: number }) {
   );
 }
 
+/* One-time / Monthly. A pill in the navbar's Contact dress: hairline border,
+   accent fill on the chosen side, and the fill slides across on a switch
+   instead of blinking between the two. */
+function BillingToggle({
+  value,
+  onChange,
+}: {
+  value: Billing;
+  onChange: (b: Billing) => void;
+}) {
+  const caption = BILLING.find((b) => b.id === value)?.caption;
+
+  return (
+    <div className="flex flex-col items-center gap-[0.9em] text-center">
+      <div
+        role="group"
+        aria-label="Billing"
+        className="inline-flex rounded-full border border-[var(--rule)] p-[3px]"
+      >
+        {BILLING.map((b) => {
+          const active = b.id === value;
+          return (
+            <button
+              key={b.id}
+              type="button"
+              aria-pressed={active}
+              onClick={() => onChange(b.id)}
+              className={`micro relative rounded-full px-[1.5em] py-[0.85em] transition-colors duration-300 ${
+                active
+                  ? "text-white"
+                  : "text-[var(--fg-70)] hover:text-[var(--fg)]"
+              }`}
+            >
+              {active && (
+                <motion.span
+                  layoutId="billing-fill"
+                  aria-hidden
+                  className="absolute inset-0 rounded-full bg-accent"
+                  transition={{ duration: 0.5, ease: [...EASE_OUT] }}
+                />
+              )}
+              <span className="relative">{b.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      <p
+        aria-live="polite"
+        className="text-[length:var(--fs-small)] leading-[1.4] text-[var(--fg-70)]"
+      >
+        {caption}
+      </p>
+    </div>
+  );
+}
+
 export default function Packages() {
+  const [billing, setBilling] = useState<Billing>("once");
+
+  /* ?billing=monthly opens the page on the monthly figures, so an ad or a
+     message quoting "$150 a month" lands on the number it promised. Read
+     after mount rather than through useSearchParams, which would pull the
+     page out of static rendering. */
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    if (q.get("billing") === "monthly") setBilling("monthly");
+  }, []);
+
+  /* the choice is written back to the address, so a copied link keeps it */
+  const choose = (next: Billing) => {
+    setBilling(next);
+    const q = new URLSearchParams(window.location.search);
+    if (next === "monthly") q.set("billing", "monthly");
+    else q.delete("billing");
+    const search = q.toString();
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${search ? `?${search}` : ""}${window.location.hash}`
+    );
+  };
+
   return (
     <section id="packages" className="gut py-[clamp(70px,9vw,190px)]">
       <MaskReveal inView amount={0.4} className="text-center">
@@ -204,10 +362,14 @@ export default function Packages() {
         </h2>
       </MaskReveal>
 
+      <div className="mt-[clamp(34px,4vw,90px)]">
+        <BillingToggle value={billing} onChange={choose} />
+      </div>
+
       {/* 2x2 on tablet, then 3 across with the combined package spanning */}
-      <div className="mt-[clamp(46px,6vw,140px)] grid grid-cols-1 gap-[clamp(12px,1vw,24px)] md:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-[clamp(28px,3vw,64px)] grid grid-cols-1 gap-[clamp(12px,1vw,24px)] md:grid-cols-2 lg:grid-cols-3">
         {PACKAGES.map((pack, i) => (
-          <Card key={pack.name} pack={pack} index={i} />
+          <Card key={pack.name} pack={pack} index={i} billing={billing} />
         ))}
       </div>
 

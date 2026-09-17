@@ -11,19 +11,33 @@
    line under the figure carries page and module counts, so a larger brief can
    see itself in a tier instead of anchoring on the starting number.
 
+   Every priced tier can also be paid monthly. The monthly figure is a tenth of
+   the one-time figure on a 12 month minimum, so the first year comes to 20%
+   over paying once, and that margin is what carries the hosting and upkeep
+   the monthly fee adds. The custom quote has no monthly figure: it is quoted
+   either way, so the card reads the same under both.
+
    Two FAQ answers were behind a collapsed accordion on the live page and
    could not be read off it; they are marked DRAFT below and should be
    confirmed before this goes live, since they are commercial commitments.
 --------------------------------------------------------------------------- */
 
-export type Package = {
-  name: string;
+export type Price = {
   /* small word before the figure — "From" */
   priceLead?: string;
   /* the figure itself, set large in Thunder */
   price: string;
   /* small qualifier after the figure — "to $7,000+", "per month" */
   priceTail?: string;
+};
+
+export type Billing = "once" | "monthly";
+
+export type Package = Price & {
+  name: string;
+  /* the same build paid as a subscription, plus what the monthly fee covers
+     on top of it. Absent on the custom quote. */
+  monthly?: Price & { includes: string[] };
   /* the size of the thing being bought — "5 to 12 pages", "3 to 8 modules".
      Sits under the price so the figure reads as a rate for a known scope
      rather than a floor with nothing attached to it. */
@@ -43,6 +57,16 @@ export const PACKAGES: Package[] = [
     name: "Web Presence",
     priceLead: "From",
     price: "$1,500",
+    monthly: {
+      priceLead: "From",
+      price: "$150",
+      priceTail: "per month",
+      includes: [
+        "Hosting, SSL, and domain management",
+        "Security updates and uptime monitoring",
+        "Up to 1 hour of edits every month",
+      ],
+    },
     scope: "1 to 3 pages",
     summary:
       "Landing pages, business websites, and redesigns for brands that need a sharper online presence.",
@@ -62,6 +86,16 @@ export const PACKAGES: Package[] = [
     name: "Business Website",
     priceLead: "From",
     price: "$2,500",
+    monthly: {
+      priceLead: "From",
+      price: "$250",
+      priceTail: "per month",
+      includes: [
+        "Hosting, SSL, and domain management",
+        "Security updates and uptime monitoring",
+        "Up to 2 hours of edits every month",
+      ],
+    },
     scope: "5 to 12 pages",
     summary:
       "Multi-page websites and full-stack web experiences with stronger structure, forms, integrations, and dynamic functionality where needed.",
@@ -82,6 +116,14 @@ export const PACKAGES: Package[] = [
     name: "Custom Business Tool",
     price: "$4,000",
     priceTail: "to $7,000+",
+    monthly: {
+      price: "$400",
+      priceTail: "to $700+ per month",
+      includes: [
+        "Hosting, backups, and monitoring",
+        "Up to 4 hours of fixes and changes every month",
+      ],
+    },
     scope: "3 to 8 modules",
     summary:
       "Custom internal tools built around the way your business actually works.",
@@ -120,6 +162,28 @@ export const PACKAGES: Package[] = [
   },
 ];
 
+/* the two ways to pay, in toggle order, each with the line that sits under
+   the toggle and says what that figure buys */
+export const BILLING: { id: Billing; label: string; caption: string }[] = [
+  { id: "once", label: "One-time", caption: "Pay once for the build." },
+  {
+    id: "monthly",
+    label: "Monthly",
+    caption: "The build, hosting, and upkeep in one fee. 12 month minimum.",
+  },
+];
+
+/* the price a package shows under a billing mode; the custom quote has no
+   monthly figure and reads the same under both */
+export function priceOf(pack: Package, billing: Billing): Price {
+  return billing === "monthly" && pack.monthly ? pack.monthly : pack;
+}
+
+/* "From $1,500", "$4,000 to $7,000+", as one line of plain text */
+export function priceText({ priceLead, price, priceTail }: Price) {
+  return [priceLead, price, priceTail].filter(Boolean).join(" ");
+}
+
 export const PRICING_NOTES = [
   "Prices are starting points for the scope listed on each card. Larger builds are quoted on the same basis: more pages, more modules, deeper integrations, more content to produce, or a compressed timeline all move the figure up.",
   "Projects include a clear revision structure. Major scope changes or new feature requests are quoted separately.",
@@ -138,6 +202,13 @@ export const FAQ: { q: string; a: string; draft?: boolean }[] = [
     q: "How do payments work?",
     /* DRAFT — not readable on the live page. Confirm before publishing. */
     a: "Projects are split across a deposit to book the work in and a balance on delivery, both invoiced in writing.",
+    draft: true,
+  },
+  {
+    q: "How does monthly pricing work?",
+    /* DRAFT — new with the monthly toggle. What happens to the site if a
+       client stops paying after the minimum is still to be decided. */
+    a: "The build is spread across a monthly fee that also covers hosting, security updates, and a set amount of edits every month. There is a 12 month minimum, and after that it runs month to month.",
     draft: true,
   },
   {
