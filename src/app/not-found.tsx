@@ -40,6 +40,10 @@ export default function NotFound() {
             Services
             <span className={TEXT_LINK_RULE} />
           </Link>
+          <Link href="/contact" className={`${TEXT_LINK} inline-flex min-h-[24px] items-center`}>
+            Contact
+            <span className={TEXT_LINK_RULE} />
+          </Link>
         </nav>
       </section>
       <Footer />

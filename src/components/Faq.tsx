@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { FAQ } from "@/lib/services";
-import { LINKS, MAILTO } from "@/lib/links";
+import { LINKS } from "@/lib/links";
 import { MaskReveal } from "./reveal";
 
 /*
@@ -40,13 +41,13 @@ export default function Faq() {
         <p className="text-[length:var(--fs-lead)] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--fg)]">
           Not sure which package fits?
         </p>
-        <a
-          href={MAILTO}
+        <Link
+          href="/contact"
           className="group relative text-[length:var(--fs-lead)] font-medium leading-[1.2] tracking-[-0.02em] text-accent"
         >
           Send a message
           <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100" />
-        </a>
+        </Link>
         <a
           href={LINKS.instagram}
           target="_blank"

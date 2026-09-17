@@ -21,11 +21,13 @@ const FS = `calc((100vw - var(--edge) * 2) / ${SET_WIDTH.wordmark})`;
 const MARK_H = `calc(${FS} * 0.9)`;
 const BAND_H = `calc(${MARK_H} / ${BANDS})`;
 
-/* mirrors the navbar: Work is an anchor on the home page, Services is a route */
+/* mirrors the navbar: Work is an anchor on the home page, Services and
+   Contact are routes */
 const NAV = [
   { label: "Work", href: "/#work", target: "#work" },
   { label: "Studio", href: "/#about", target: "#about" },
   { label: "Services", href: "/services", target: null },
+  { label: "Contact", href: "/contact", target: null },
 ];
 
 /* only the channels that exist: a glyph with nowhere to go is noise */

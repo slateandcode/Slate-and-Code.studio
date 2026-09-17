@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import ContactModal from "@/components/ContactModal";
 import { OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const DESCRIPTION =
@@ -59,7 +58,6 @@ export default function RootLayout({
       </head>
       <body>
         <SmoothScroll>{children}</SmoothScroll>
-        <ContactModal />
       </body>
     </html>
   );
