@@ -21,6 +21,8 @@ export type Work = {
   alt: string;
   /* false keeps the project off the home page strip */
   strip?: boolean;
+  /* a studio project built without a client; tagged on the portfolio */
+  concept?: boolean;
 };
 
 export const WORKS: Work[] = [
@@ -41,6 +43,7 @@ export const WORKS: Work[] = [
       "Site for a creative agency that works as a retained department, bringing design, web, internal tools, and development under one roof.",
     href: "https://voidform-seven.vercel.app/",
     alt: "VoidForm website. A blue hero with an outlined 'Developing' marquee running over the silhouette of a film camera.",
+    concept: true,
   },
   {
     src: "/work/norhus-real-estate.webp",
@@ -50,6 +53,7 @@ export const WORKS: Work[] = [
       "A real estate site told as a 3D scroll story, from fourteen lit windows down to the one apartment still awake.",
     href: "https://norhus-real-estate.vercel.app/",
     alt: "Nørhus Real Estate website. A black and cream hero with 'Real estate in Copenhagen' set along a curve.",
+    concept: true,
   },
   {
     src: "/work/untold-archives.webp",
@@ -68,6 +72,7 @@ export const WORKS: Work[] = [
       "Landing page for a privacy-first analytics tool. One line of script, no cookies, and every number that matters on one screen.",
     href: "https://perch-website-tracker.vercel.app/",
     alt: "Perch Website Tracker landing page. The headline reads 'Check your analytics without the maze' above a dashboard preview.",
+    concept: true,
   },
   {
     src: "/work/kairos-k01.webp",
@@ -77,6 +82,7 @@ export const WORKS: Work[] = [
       "Product site for the K-01, a hand-wound watch whose case, gears, and ticking movement are all built in code.",
     href: "https://kairos-watch.vercel.app/",
     alt: "Kairos Watch website. The K-01 watch face in close-up on a dark hero.",
+    concept: true,
   },
   {
     src: "/work/superior-ink.webp",
@@ -85,6 +91,7 @@ export const WORKS: Work[] = [
     summary:
       "Redesign for a custom merchandise printer and fulfillment company, with a guided quote form that helps buyers pick a print method.",
     alt: "Superior Ink website. A third party logistics hero with stacked shipping cartons on a pallet.",
+    concept: true,
   },
   {
     src: "/work/mubarak-auto.webp",
@@ -103,6 +110,7 @@ export const WORKS: Work[] = [
       "An illustrated catalogue of beautiful products that were retired, from the Walkman to the Nokia 3310.",
     href: "https://discontinued-kappa.vercel.app/",
     alt: "Discontinued website. An illustrated hero with a classic iPod and the line 'The most elegant that got lost'.",
+    concept: true,
   },
   {
     src: "/work/virdis-supplement.webp",
@@ -112,6 +120,7 @@ export const WORKS: Work[] = [
       "Scroll-driven 3D site for a daily supplement. The jar spins, opens, and breaks out into a labelled diagram of its ingredients.",
     href: "https://virdis-supplement-demo.vercel.app/",
     alt: "Virdis Supplement website. The Virdis wordmark in an italic serif with capsules floating around it.",
+    concept: true,
   },
   {
     src: "/work/limas-no-limits.webp",
@@ -121,6 +130,7 @@ export const WORKS: Work[] = [
       "Site for an owner-operated bathroom and flooring remodeler, built around getting a quote or calling straight from the page.",
     href: "https://limasnolimits-demo.vercel.app/",
     alt: "Lima's No Limits website. 'Lima's Bathrooms and Floors' set in heavy type over a finished marble bathroom.",
+    concept: true,
     strip: false,
   },
   {
@@ -130,6 +140,7 @@ export const WORKS: Work[] = [
     summary:
       "Rebuild for a hardwood flooring company covering dustless refinishing, custom wide plank, and installation, with a showroom visit one click away.",
     alt: "1 Wood Floors website. 'Hardwood Flooring' in large italic serif around a plank shown half raw, half stained.",
+    concept: true,
     strip: false,
   },
   {
@@ -139,6 +150,7 @@ export const WORKS: Work[] = [
     summary:
       "Site for an operations firm that fixes warehouses and supply chains from the inside, from the first review to training the team that runs it.",
     alt: "Meridian Solutions website. 'Operators, not consultants. We fix what broke' above a warehouse with its loading docks.",
+    concept: true,
     strip: false,
   },
   {
@@ -148,6 +160,7 @@ export const WORKS: Work[] = [
     summary:
       "Scroll-driven launch site for a face mist. The bottle drifts through clouds and type as you move down the page.",
     alt: "Veryra website. A lilac face mist bottle rising through clouds in front of the words Radiant, Pure, and Soft.",
+    concept: true,
     strip: false,
   },
   {
@@ -157,6 +170,7 @@ export const WORKS: Work[] = [
     summary:
       "Site for a real estate developer building residential towers and villa complexes, with private inquiries handled one to one.",
     alt: "Arcus Real Estate website. The Arcus script wordmark over 'Real Estate' against glass towers and a blue sky.",
+    concept: true,
     strip: false,
   },
   {
@@ -166,6 +180,7 @@ export const WORKS: Work[] = [
     summary:
       "Site for a small coffee shop with three coffees on the menu, changed every Monday, and a membership for regulars.",
     alt: "Marlows Coffee website. The name spelled out in coffee beans beside an iced latte on a warm orange background.",
+    concept: true,
     strip: false,
   },
   {
@@ -175,6 +190,7 @@ export const WORKS: Work[] = [
     summary:
       "Site for a pool builder, from new pools to renovations, with finished projects and a quote request up front.",
     alt: "Basin Pools website. 'Basin Pools, your dream pool starts here' over a garden pool, with project counts down the side.",
+    concept: true,
     strip: false,
   },
 ];

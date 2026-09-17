@@ -8,8 +8,9 @@ import { TEXT_LINK, TEXT_LINK_RULE } from "@/lib/ui";
 import { WORKS, type Work } from "@/lib/work";
 
 /* ---------------------------------------------------------------------------
-   Every project as a card: the screenshot, then a meta row (number, kind, and
-   either the live link or "In progress"), the name, and a line on what it is.
+   Every project as a card: the screenshot, then a meta row (number, kind, a
+   small Concept tag on studio projects, and either the live link or "In
+   progress"), the name, and a line on what it is.
 
    The screenshot is a link too when the project is live, but it is kept out
    of the tab order and away from screen readers, so each project is reached
@@ -26,7 +27,7 @@ const ORDERED = [
 function Status({ work }: { work: Work }) {
   if (!work.href) {
     return (
-      <span className="flex min-h-[24px] items-center gap-[0.7em] text-[length:var(--fs-micro)]">
+      <span className="flex min-h-[24px] shrink-0 items-center gap-[0.7em] whitespace-nowrap text-[length:var(--fs-micro)]">
         <span className="animate-blink block size-[0.42em] rounded-full bg-accent" />
         <span className="micro text-[var(--fg-70)]">In progress</span>
       </span>
@@ -38,7 +39,7 @@ function Status({ work }: { work: Work }) {
       href={work.href}
       target="_blank"
       rel="noopener noreferrer"
-      className={`${TEXT_LINK} inline-flex min-h-[24px] items-center`}
+      className={`${TEXT_LINK} inline-flex min-h-[24px] shrink-0 items-center whitespace-nowrap`}
     >
       <span className="relative inline-flex items-center gap-[0.6em]">
         Visit site
@@ -101,10 +102,19 @@ function Card({ work, index }: { work: Work; index: number }) {
       <Shot work={work} index={index} />
 
       <div className="mt-[clamp(14px,1.2vw,24px)] flex items-center justify-between gap-[1em]">
-        <span className="micro text-[var(--fg-70)]">
-          {String(index + 1).padStart(2, "0")}
-          <span className="mx-[0.8em] text-[var(--fg-28)]">/</span>
-          {work.kind}
+        <span className="micro flex flex-wrap items-center gap-x-[1em] gap-y-[0.5em] text-[var(--fg-70)]">
+          <span>
+            {String(index + 1).padStart(2, "0")}
+            <span className="mx-[0.8em] text-[var(--fg-28)]">/</span>
+            {work.kind}
+          </span>
+          {/* a hairline pill, quieter than the kind it sits beside: it
+              qualifies the project rather than competing with its name */}
+          {work.concept && (
+            <span className="whitespace-nowrap rounded-full border border-[var(--rule)] px-[0.75em] pb-[0.3em] pt-[0.35em] leading-none text-[var(--fg-70)]">
+              Concept
+            </span>
+          )}
         </span>
         <Status work={work} />
       </div>
