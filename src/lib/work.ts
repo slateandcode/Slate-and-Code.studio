@@ -139,6 +139,7 @@ export const WORKS: Work[] = [
     kind: "Website redesign",
     summary:
       "Rebuild for a hardwood flooring company covering dustless refinishing, custom wide plank, and installation, with a showroom visit one click away.",
+    href: "https://1-wood-floors.vercel.app/",
     alt: "1 Wood Floors website. 'Hardwood Flooring' in large italic serif around a plank shown half raw, half stained.",
     concept: true,
     strip: false,
@@ -149,6 +150,7 @@ export const WORKS: Work[] = [
     kind: "Website",
     summary:
       "Site for an operations firm that fixes warehouses and supply chains from the inside, from the first review to training the team that runs it.",
+    href: "https://meridrian-solutions.vercel.app/",
     alt: "Meridian Solutions website. 'Operators, not consultants. We fix what broke' above a warehouse with its loading docks.",
     concept: true,
     strip: false,
@@ -179,6 +181,7 @@ export const WORKS: Work[] = [
     kind: "Website",
     summary:
       "Site for a small coffee shop with three coffees on the menu, changed every Monday, and a membership for regulars.",
+    href: "https://marlows-coffee-demo.vercel.app/",
     alt: "Marlows Coffee website. The name spelled out in coffee beans beside an iced latte on a warm orange background.",
     concept: true,
     strip: false,
@@ -189,7 +192,19 @@ export const WORKS: Work[] = [
     kind: "Website",
     summary:
       "Site for a pool builder, from new pools to renovations, with finished projects and a quote request up front.",
+    href: "https://basin-pools-demo.vercel.app/",
     alt: "Basin Pools website. 'Basin Pools, your dream pool starts here' over a garden pool, with project counts down the side.",
+    concept: true,
+    strip: false,
+  },
+  {
+    src: "/work/ashby-properties.webp",
+    name: "Ashby Properties",
+    kind: "Website",
+    summary:
+      "Site for a property firm that buys, sells and advises, built around a short list of properties it walked and measured before putting them on the books.",
+    href: "https://ashby-properties.vercel.app/",
+    alt: "Ashby Properties website. The name set in tall condensed type beside an apartment block shot from below.",
     concept: true,
     strip: false,
   },
