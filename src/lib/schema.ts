@@ -12,6 +12,7 @@
    The registered details stay on /privacy and /terms.
 --------------------------------------------------------------------------- */
 
+import { LEGAL } from "./legal";
 import { LINKS } from "./links";
 import { FAQ, PACKAGES } from "./services";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./site";
@@ -32,7 +33,7 @@ export function organizationSchema() {
         "@id": ORG_ID,
         name: SITE_NAME,
         alternateName: "Slate & Code",
-        legalName: "Slate & Code Web-Design",
+        legalName: LEGAL.name,
         url: SITE_URL,
         logo: {
           "@type": "ImageObject",

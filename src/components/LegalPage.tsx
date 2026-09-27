@@ -2,20 +2,11 @@ import type { ReactNode } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { MaskReveal } from "@/components/reveal";
+import { LEGAL, LEGAL_UPDATED } from "@/lib/legal";
 import { LINKS, MAILTO } from "@/lib/links";
 
-/* The business as it is registered, shared by the privacy policy and the
-   terms so the two can never disagree on who is speaking. */
-export const LEGAL = {
-  name: "Slate & Code Web-Design",
-  licence:
-    "Sole Establishment, licensed by the Dubai Department of Economy and Tourism (DET), License No. 1644041",
-  address: "Dubai, United Arab Emirates",
-  phone: "+971 50 685 2009",
-  phoneHref: "tel:+971506852009",
-};
-
-export const LEGAL_UPDATED = "27 September 2026";
+/* the pages import the registered details from here along with the layout */
+export { LEGAL, LEGAL_UPDATED };
 
 export type LegalSection = { id: string; title: string; body: ReactNode };
 

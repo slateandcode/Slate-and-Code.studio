@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { PiInstagramLogo, PiEnvelopeSimple } from "react-icons/pi";
+import { LEGAL } from "@/lib/legal";
 import { LINKS, MAILTO } from "@/lib/links";
 import { scrollToTarget } from "@/lib/lenis";
 import { SET_WIDTH } from "@/lib/type";
@@ -202,6 +203,14 @@ export default function Footer() {
           Back to top &#8593;
         </button>
       </div>
+
+      {/* the registered business, as fine print: sentence case, a step
+          quieter than the bar above, so it is there for anyone who looks
+          and invisible to anyone who does not */}
+      <p className="gut -mt-[clamp(4px,0.4vw,10px)] pb-[clamp(14px,1.1vw,24px)] text-[length:var(--fs-micro)] leading-[1.5] text-[var(--fg-45)]">
+        {LEGAL.name} · Sole Establishment licensed by Dubai DET · License No.{" "}
+        {LEGAL.licenceNo}
+      </p>
     </footer>
   );
 }
