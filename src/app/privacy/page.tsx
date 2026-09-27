@@ -5,24 +5,19 @@ import LegalPage, {
   WhoWeAre,
   type LegalSection,
 } from "@/components/LegalPage";
-import { OG_IMAGE } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/site";
 
 const TITLE = "Privacy Policy";
 const DESCRIPTION =
   "What personal data Slate & Code collects through its website, ads and messages, why, who it is shared with, and your rights over it.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/privacy" },
-  openGraph: {
-    type: "website",
-    url: "/privacy",
-    title: `${TITLE} · Slate & Code Studio`,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-};
+  path: "/privacy",
+});
 
 /* Every tool named here was checked against the codebase on the date at the
    top: no analytics, no tracking scripts, no cookies, no embeds. Adding any of
@@ -283,17 +278,20 @@ const SECTIONS: LegalSection[] = [
 
 export default function PrivacyPage() {
   return (
-    <LegalPage
-      label="Privacy"
-      title={
-        <>
-          Privacy
-          <br />
-          policy
-        </>
-      }
-      intro="What we collect, why we collect it, who sees it and how to have it removed. It covers this website, our ads and messages, and the work we do for clients."
-      sections={SECTIONS}
-    />
+    <>
+      <JsonLd data={breadcrumbSchema("Privacy Policy", "/privacy")} />
+      <LegalPage
+        label="Privacy"
+        title={
+          <>
+            Privacy
+            <br />
+            policy
+          </>
+        }
+        intro="What we collect, why we collect it, who sees it and how to have it removed. It covers this website, our ads and messages, and the work we do for clients."
+        sections={SECTIONS}
+      />
+    </>
   );
 }

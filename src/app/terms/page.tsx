@@ -6,24 +6,19 @@ import LegalPage, {
   WhoWeAre,
   type LegalSection,
 } from "@/components/LegalPage";
-import { OG_IMAGE } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/site";
 
 const TITLE = "Terms of Use";
 const DESCRIPTION =
   "The terms for using the Slate & Code website: concept work, free audits, indicative pricing, ownership, liability and governing law.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/terms" },
-  openGraph: {
-    type: "website",
-    url: "/terms",
-    title: `${TITLE} · Slate & Code Studio`,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-};
+  path: "/terms",
+});
 
 const SECTIONS: LegalSection[] = [
   {
@@ -166,17 +161,20 @@ const SECTIONS: LegalSection[] = [
 
 export default function TermsPage() {
   return (
-    <LegalPage
-      label="Terms"
-      title={
-        <>
-          Terms
-          <br />
-          of use
-        </>
-      }
-      intro="The ground rules for using this website. By using it, you agree to them. Client projects are covered by their own written agreement."
-      sections={SECTIONS}
-    />
+    <>
+      <JsonLd data={breadcrumbSchema("Terms of Use", "/terms")} />
+      <LegalPage
+        label="Terms"
+        title={
+          <>
+            Terms
+            <br />
+            of use
+          </>
+        }
+        intro="The ground rules for using this website. By using it, you agree to them. Client projects are covered by their own written agreement."
+        sections={SECTIONS}
+      />
+    </>
   );
 }

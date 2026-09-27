@@ -6,31 +6,20 @@ import ContactForm from "@/components/ContactForm";
 import { MaskReveal } from "@/components/reveal";
 import { LINKS, MAILTO } from "@/lib/links";
 import { PACKAGES, priceText } from "@/lib/services";
-import { OG_IMAGE } from "@/lib/site";
+import JsonLd from "@/components/JsonLd";
+import { breadcrumbSchema } from "@/lib/schema";
+import { pageMetadata } from "@/lib/site";
 import { TEXT_LINK, TEXT_LINK_RULE } from "@/lib/ui";
 
 const TITLE = "Contact";
 const DESCRIPTION =
   "Tell the studio what you are building. Websites from $1,500 or $150 a month, custom business tools from $4,000. Answered the same day.";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: TITLE,
   description: DESCRIPTION,
-  alternates: { canonical: "/contact" },
-  openGraph: {
-    type: "website",
-    url: "/contact",
-    title: `${TITLE} · Slate & Code Studio`,
-    description: DESCRIPTION,
-    images: [OG_IMAGE],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: `${TITLE} · Slate & Code Studio`,
-    description: DESCRIPTION,
-    images: [OG_IMAGE.url],
-  },
-};
+  path: "/contact",
+});
 
 /* what the visitor can expect once they hit send, in the process section's
    own words so the two pages never promise different things */
@@ -66,6 +55,7 @@ const ENTRY = PACKAGES[0];
 export default function ContactPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbSchema("Contact", "/contact")} />
       <Navbar />
 
       <section className="gut pb-[clamp(70px,9vw,190px)] pt-[clamp(104px,11vw,230px)]">

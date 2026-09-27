@@ -1,30 +1,52 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
-import { OG_IMAGE, SITE_NAME, SITE_URL } from "@/lib/site";
-
-const DESCRIPTION =
-  "A studio of one, by design. The same person who designs the screen writes the code behind it and directs the content that fills it.";
+import JsonLd from "@/components/JsonLd";
+import { organizationSchema } from "@/lib/schema";
+import {
+  OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: `${SITE_NAME} · Websites, Software, Systems`,
+    default: SITE_TITLE,
     template: `%s · ${SITE_NAME}`,
   },
-  description: DESCRIPTION,
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  publisher: SITE_NAME,
+  category: "Web design",
+  /* full-size image previews and uncapped snippets, so a result can show
+     the share card and the whole description */
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
+    locale: "en_US",
     url: "/",
-    title: `${SITE_NAME} · Websites, Software, Systems`,
-    description: DESCRIPTION,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: [OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_NAME} · Websites, Software, Systems`,
-    description: DESCRIPTION,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
     images: [OG_IMAGE.url],
   },
   alternates: { canonical: "/" },
@@ -64,6 +86,8 @@ export default function RootLayout({
         ))}
       </head>
       <body>
+        {/* who the site belongs to, on every route */}
+        <JsonLd data={organizationSchema()} />
         <SmoothScroll>{children}</SmoothScroll>
       </body>
     </html>
