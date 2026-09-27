@@ -45,6 +45,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        {/* PRIVACY: the site runs no analytics, pixels or cookies, and
+            /privacy says so. Adding a Meta Pixel, Google Analytics, Vercel
+            Analytics or any tracking script means rewriting the
+            "Automatically" and "Cookies" sections of src/app/privacy/page.tsx,
+            adding the provider to "Who we share it with", bumping
+            LEGAL_UPDATED, and adding a cookie consent banner for UK visitors
+            before it goes live. */}
         {PRELOAD.map((f) => (
           <link
             key={f}

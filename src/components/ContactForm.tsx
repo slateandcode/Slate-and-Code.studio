@@ -7,6 +7,7 @@ import {
   useState,
   type FormEvent,
 } from "react";
+import Link from "next/link";
 import { cubic, EASE_OUT } from "@/lib/anim";
 import { LINKS } from "@/lib/links";
 import {
@@ -312,6 +313,19 @@ export default function ContactForm() {
           )}
         </p>
       </div>
+
+      {/* the notice at the point of collection, so the form never asks for
+          details without saying where they go */}
+      <p className="mt-[clamp(16px,1.6vw,28px)] text-[length:var(--fs-micro)] text-[var(--fg-70)]">
+        Your details are only used to reply to this inquiry. See the{" "}
+        <Link
+          href="/privacy"
+          className="underline decoration-[var(--rule)] underline-offset-4 transition-colors duration-300 hover:text-accent"
+        >
+          privacy policy
+        </Link>
+        .
+      </p>
     </form>
   );
 }

@@ -389,3 +389,101 @@ select:focus-visible {
     opacity: 0.19 !important;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Legal prose: the running text on /privacy and /terms. Body size at 70% ink
+   like the contact page's step copy, with bold and links up at full ink, and
+   list items marked with a small accent square instead of a bullet.
+--------------------------------------------------------------------------- */
+
+.legal-prose {
+  max-width: 62ch;
+  font-size: var(--fs-body);
+  line-height: 1.55;
+  color: var(--fg-70);
+}
+
+.legal-prose > * + * {
+  margin-top: 0.9em;
+}
+
+.legal-prose strong,
+.legal-prose h3 {
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.legal-prose h3 + * {
+  margin-top: 0.35em;
+}
+
+.legal-prose * + h3 {
+  margin-top: 1.4em;
+}
+
+.legal-prose a {
+  color: var(--fg);
+  text-decoration: underline;
+  text-decoration-color: var(--rule);
+  text-underline-offset: 4px;
+  transition: color 0.3s, text-decoration-color 0.3s;
+}
+
+.legal-prose a:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+.legal-prose li {
+  position: relative;
+  padding-left: 1.2em;
+}
+
+.legal-prose li + li {
+  margin-top: 0.45em;
+}
+
+.legal-prose li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.32em;
+  height: 0.32em;
+  background: var(--color-accent);
+}
+
+/* the registered details: label over value on a phone, side by side above */
+.legal-prose dl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 1px solid var(--rule);
+}
+
+.legal-prose dt {
+  padding-top: 0.8em;
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.legal-prose dd {
+  padding-bottom: 0.8em;
+  border-bottom: 1px solid var(--rule);
+  color: var(--fg);
+}
+
+@media (min-width: 40rem) {
+  .legal-prose dl {
+    grid-template-columns: 8em minmax(0, 1fr);
+  }
+  .legal-prose dt,
+  .legal-prose dd {
+    padding-block: 0.8em;
+    border-bottom: 1px solid var(--rule);
+  }
+  .legal-prose dt {
+    padding-top: calc(0.8em + 0.35em);
+  }
+}

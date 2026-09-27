@@ -29,6 +29,11 @@ const NAV = [
   { label: "Contact", href: "/contact", target: null },
 ];
 
+const LEGAL_NAV = [
+  { label: "Privacy Policy", href: "/privacy" },
+  { label: "Terms", href: "/terms" },
+];
+
 /* only the channels that exist: a glyph with nowhere to go is noise */
 const SOCIALS = [
   { href: LINKS.instagram, label: "Instagram", Icon: PiInstagramLogo },
@@ -171,10 +176,25 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* bottom bar */}
-      <div className="gut micro mt-[clamp(20px,2.2vw,44px)] flex items-center justify-between border-t border-[var(--rule)] py-[clamp(14px,1.1vw,24px)] text-[var(--fg-70)]">
+      {/* bottom bar. The legal links take the middle; on a phone the three
+          do not fit on one line, so they drop to a row of their own under
+          the other two. */}
+      <div className="gut micro mt-[clamp(20px,2.2vw,44px)] flex flex-wrap items-center justify-between gap-y-[1.2em] border-t border-[var(--rule)] py-[clamp(14px,1.1vw,24px)] text-[var(--fg-70)]">
         <span>&copy; 2026 Slate &amp; Code Studio</span>
-        <span className="hidden md:block">slateandcode.studio</span>
+        <nav
+          aria-label="Legal"
+          className="order-last flex w-full gap-[clamp(20px,2vw,40px)] sm:order-none sm:w-auto"
+        >
+          {LEGAL_NAV.map((n) => (
+            <Link
+              key={n.href}
+              href={n.href}
+              className="-my-[8px] py-[8px] transition-colors duration-300 hover:text-accent"
+            >
+              {n.label}
+            </Link>
+          ))}
+        </nav>
         <button
           onClick={() => scrollToTarget(0)}
           className="-my-[8px] py-[8px] transition-colors duration-300 hover:text-accent"
