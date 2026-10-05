@@ -8,6 +8,7 @@ import {
   inquiryBody,
   inquirySubject,
 } from "@/lib/inquiry";
+import { FORMATS, editingBody, editingSubject } from "@/lib/editing";
 
 /* ---------------------------------------------------------------------------
    POST /api/contact — emails an inquiry from the contact form to the inbox
@@ -76,6 +77,10 @@ export async function POST(req: Request) {
   const message = str(data.message);
   const budget = str(data.budget);
   const timeline = str(data.timeline);
+  /* the unlisted /editing form posts here too, with its own two fields */
+  const editing = data.kind === "editing";
+  const channel = oneLine(str(data.channel));
+  const format = str(data.format);
 
   if (!name || !email || !message) {
     return fail("Add your name, email, and a line about the project.", 400);
@@ -87,7 +92,11 @@ export async function POST(req: Request) {
     return fail("One of the fields is too long.", 400);
   }
   /* the two selects only ever send values off their own lists */
-  if (
+  if (editing) {
+    if (channel.length > 300 || (format && !FORMATS.includes(format))) {
+      return fail("Check the channel link and the format.", 400);
+    }
+  } else if (
     (budget && !BUDGET_VALUES.includes(budget)) ||
     (timeline && !TIMELINES.includes(timeline))
   ) {
@@ -124,8 +133,10 @@ export async function POST(req: Request) {
         from,
         to,
         reply_to: email,
-        subject: oneLine(inquirySubject(name)),
-        text: inquiryBody({ name, email, message, budget, timeline }),
+        subject: oneLine(editing ? editingSubject(name) : inquirySubject(name)),
+        text: editing
+          ? editingBody({ name, email, message, channel, format })
+          : inquiryBody({ name, email, message, budget, timeline }),
       }),
       signal: controller.signal,
     });
