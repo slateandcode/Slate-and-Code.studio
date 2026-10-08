@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { cubic, EASE_OUT } from "@/lib/anim";
 import { LINKS } from "@/lib/links";
+import { track } from "@/lib/pixel";
 import {
   BUDGET_GROUPS,
   HONEYPOT,
@@ -116,6 +117,8 @@ export default function ContactForm() {
         body: JSON.stringify({ ...inquiry, [HONEYPOT]: read(HONEYPOT) }),
       });
       if (res.ok) {
+        /* the conversion the ads optimise for; sent only with consent */
+        track("Lead", { content_name: "Project inquiry" });
         setStatus({ kind: "sent", name: inquiry.name.split(/\s+/)[0] });
         return;
       }

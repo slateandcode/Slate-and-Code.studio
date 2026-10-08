@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { PiInstagramLogo, PiEnvelopeSimple } from "react-icons/pi";
 import { LEGAL } from "@/lib/legal";
+import { OPEN_CONSENT_EVENT } from "@/lib/pixel";
 import { LINKS, MAILTO } from "@/lib/links";
 import { scrollToTarget } from "@/lib/lenis";
 import { SET_WIDTH } from "@/lib/type";
@@ -195,6 +196,13 @@ export default function Footer() {
               {n.label}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
+            className="-my-[8px] py-[8px] uppercase transition-colors duration-300 hover:text-accent"
+          >
+            Cookie settings
+          </button>
         </nav>
         <button
           onClick={() => scrollToTarget(0)}

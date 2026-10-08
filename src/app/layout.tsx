@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import JsonLd from "@/components/JsonLd";
+import MetaPixel from "@/components/MetaPixel";
 import { organizationSchema } from "@/lib/schema";
 import {
   OG_IMAGE,
@@ -67,13 +68,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* PRIVACY: the site runs no analytics, pixels or cookies, and
-            /privacy says so. Adding a Meta Pixel, Google Analytics, Vercel
-            Analytics or any tracking script means rewriting the
-            "Automatically" and "Cookies" sections of src/app/privacy/page.tsx,
-            adding the provider to "Who we share it with", bumping
-            LEGAL_UPDATED, and adding a cookie consent banner for UK visitors
-            before it goes live. */}
+        {/* PRIVACY: the only tracking on the site is the Meta Pixel, and it
+            loads only after consent on the banner (<MetaPixel />, see
+            src/lib/pixel.ts). /privacy says exactly that. Adding Google
+            Analytics, Vercel Analytics or any other tracking script means
+            gating it the same way, naming the provider in the "Automatically",
+            "Cookies" and "Who we share it with" sections of
+            src/app/privacy/page.tsx, and bumping LEGAL_UPDATED. */}
         {PRELOAD.map((f) => (
           <link
             key={f}
@@ -89,6 +90,7 @@ export default function RootLayout({
         {/* who the site belongs to, on every route */}
         <JsonLd data={organizationSchema()} />
         <SmoothScroll>{children}</SmoothScroll>
+        <MetaPixel />
       </body>
     </html>
   );

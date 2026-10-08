@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { cubic, EASE_OUT } from "@/lib/anim";
 import { LINKS } from "@/lib/links";
 import { HONEYPOT, LIMITS } from "@/lib/inquiry";
+import { track } from "@/lib/pixel";
 import {
   QUESTIONS,
   WEBSITE_MAX,
@@ -132,6 +133,8 @@ export default function FreeSiteQuiz() {
         }),
       });
       if (res.ok) {
+        /* the conversion the ads optimise for; sent only with consent */
+        track("Lead", { content_name: "Free website" });
         setStatus({ kind: "sent", name: request.name.split(/\s+/)[0] });
         return;
       }

@@ -11,4 +11,4 @@ export const LEGAL = {
   phoneHref: "tel:+971506852009",
 };
 
-export const LEGAL_UPDATED = "27 September 2026";
+export const LEGAL_UPDATED = "8 October 2026";

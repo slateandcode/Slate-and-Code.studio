@@ -20,8 +20,9 @@ export const metadata: Metadata = pageMetadata({
 });
 
 /* Every tool named here was checked against the codebase on the date at the
-   top: no analytics, no tracking scripts, no cookies, no embeds. Adding any of
-   those means updating the "Automatically" and "Cookies" sections first. */
+   top: the Meta Pixel behind the consent banner (src/lib/pixel.ts), and no
+   other analytics, tracking scripts, cookies or embeds. Adding any of those
+   means updating the "Automatically" and "Cookies" sections first. */
 const SECTIONS: LegalSection[] = [
   {
     id: "who-we-are",
@@ -49,16 +50,22 @@ const SECTIONS: LegalSection[] = [
           your current website address) and the content of your messages.
         </p>
 
-        <h3>The contact form on this website</h3>
+        <h3>The forms on this website</h3>
         <p>
-          Your name, email address and message, plus the budget and timeline
-          if you choose them.
+          On the contact form: your name, email address and message, plus the
+          budget and timeline if you choose them. On the free website form:
+          your answers to its three questions, your name, your email address
+          and, if you give it, your website address.
         </p>
 
         <h3>Automatically, when you visit</h3>
         <p>
-          This website does not use analytics, advertising or tracking tools,
-          and it does not set cookies. Our hosting provider records standard
+          If you accept cookies on the banner, the Meta Pixel records the
+          pages you visit here and whether you send one of our forms, along
+          with your browser and device details and your IP address, and links
+          them to the Meta ad you came from. It sets a cookie to do this. If
+          you decline, or do not choose, it does not load at all. We use no
+          other analytics or tracking tools. Our hosting provider records standard
           technical information for each visit, such as your IP address,
           browser and device type, and the pages requested. This is needed to
           deliver the site and keep it secure. When you send the contact form,
@@ -87,6 +94,10 @@ const SECTIONS: LegalSection[] = [
           <li>To plan, build and deliver client projects.</li>
           <li>To send invoices and keep accounting records.</li>
           <li>To keep this website running, secure and improving.</li>
+          <li>
+            With your consent, to measure which of our ads bring people to
+            this website and lead to enquiries.
+          </li>
         </ul>
         <p>
           We do not sell or rent your personal data, and we do not use it for
@@ -109,7 +120,8 @@ const SECTIONS: LegalSection[] = [
         <ul>
           <li>
             <strong>Consent</strong>, when you choose to contact us and share
-            your details. You can withdraw it at any time.
+            your details, and when you accept advertising cookies. You can
+            withdraw it at any time.
           </li>
           <li>
             <strong>Legitimate interests</strong>, to reply to enquiries,
@@ -140,7 +152,8 @@ const SECTIONS: LegalSection[] = [
         <ul>
           <li>
             <strong>Meta Platforms</strong> (Instagram and Facebook), for our
-            ads and messages. Meta also uses data on its own platforms under
+            ads and messages, and, if you accept cookies, for the Meta Pixel
+            on this website. Meta also uses data on its own platforms under
             its own privacy policy.
           </li>
           <li>
@@ -198,6 +211,10 @@ const SECTIONS: LegalSection[] = [
           Messages you send on Instagram or Facebook are also kept by Meta
           under its own policy.
         </li>
+        <li>
+          The Meta Pixel cookie expires after 90 days, or sooner if you
+          withdraw consent or clear your cookies.
+        </li>
       </ul>
     ),
   },
@@ -237,13 +254,23 @@ const SECTIONS: LegalSection[] = [
     id: "cookies",
     title: "Cookies",
     body: (
-      <p>
-        This website does not use cookies, not even essential ones, and it has
-        no analytics, advertising or tracking tools. That is why there is no
-        cookie banner. Sites we link to, such as Instagram, have their own
-        cookies and policies. If this changes, we will update this section
-        and ask for your consent where the law requires it.
-      </p>
+      <>
+        <p>
+          The only cookies on this website are advertising cookies from the
+          Meta Pixel (named <strong>_fbp</strong> and <strong>_fbc</strong>),
+          and they are set only if you click Accept on the cookie banner. They
+          tell us which of our Meta ads brought you here and whether you went
+          on to send us a form. If you click Decline, the pixel is never
+          loaded and no cookie is set.
+        </p>
+        <p>
+          Your choice is saved in your browser so we do not ask again. You can
+          change it at any time with Cookie settings at the bottom of every
+          page. Withdrawing consent stops the pixel and removes its cookies.
+          Sites we link to, such as Instagram, have their own cookies and
+          policies.
+        </p>
+      </>
     ),
   },
   {
