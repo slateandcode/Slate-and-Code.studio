@@ -10,7 +10,7 @@
    then pulls fbevents.js in asynchronously. Meta's <noscript> image is left
    out on purpose: a visitor without JavaScript cannot consent. */
 
-export const PIXEL_ID = "1401823238599999";
+export const PIXEL_ID = "1633415938315493";
 
 const CONSENT_KEY = "sc-consent-ads";
 export const OPEN_CONSENT_EVENT = "sc:cookie-settings";
