@@ -149,6 +149,12 @@ select:focus-visible {
   outline: none;
 }
 
+/* headings that take focus by script when a step changes (tabindex -1) are
+   announced, not operated, so they get no ring */
+[tabindex="-1"]:focus-visible {
+  outline: none;
+}
+
 /* ---------------------------------------------------------------------------
    Small shared primitives
 --------------------------------------------------------------------------- */

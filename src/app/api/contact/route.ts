@@ -9,6 +9,14 @@ import {
   inquirySubject,
 } from "@/lib/inquiry";
 import { FORMATS, editingBody, editingSubject } from "@/lib/editing";
+import {
+  QUESTIONS,
+  WEBSITE_MAX,
+  freeSiteBody,
+  freeSiteSubject,
+  validAnswers,
+  type Answers,
+} from "@/lib/campaign";
 
 /* ---------------------------------------------------------------------------
    POST /api/contact — emails an inquiry from the contact form to the inbox
@@ -81,8 +89,23 @@ export async function POST(req: Request) {
   const editing = data.kind === "editing";
   const channel = oneLine(str(data.channel));
   const format = str(data.format);
+  /* so does the /get-your-free-website campaign: three picked answers and
+     an optional site in place of a message */
+  const freeSite = data.kind === "free-website";
+  const website = oneLine(str(data.website));
+  const answers = Object.fromEntries(
+    QUESTIONS.map((q) => [q.key, str(data[q.key])])
+  ) as Answers;
 
-  if (!name || !email || !message) {
+  if (freeSite) {
+    if (!name || !email) return fail("Add your name and email.", 400);
+    if (!validAnswers(answers)) {
+      return fail("Go back and pick an answer for each question.", 400);
+    }
+    if (website.length > WEBSITE_MAX) {
+      return fail("That website address is too long.", 400);
+    }
+  } else if (!name || !email || !message) {
     return fail("Add your name, email, and a line about the project.", 400);
   }
   if (!isEmail(email) || email.length > LIMITS.email) {
@@ -97,8 +120,9 @@ export async function POST(req: Request) {
       return fail("Check the channel link and the format.", 400);
     }
   } else if (
-    (budget && !BUDGET_VALUES.includes(budget)) ||
-    (timeline && !TIMELINES.includes(timeline))
+    !freeSite &&
+    ((budget && !BUDGET_VALUES.includes(budget)) ||
+      (timeline && !TIMELINES.includes(timeline)))
   ) {
     return fail("Pick the budget and timeline from the lists.", 400);
   }
@@ -133,10 +157,18 @@ export async function POST(req: Request) {
         from,
         to,
         reply_to: email,
-        subject: oneLine(editing ? editingSubject(name) : inquirySubject(name)),
-        text: editing
-          ? editingBody({ name, email, message, channel, format })
-          : inquiryBody({ name, email, message, budget, timeline }),
+        subject: oneLine(
+          freeSite
+            ? freeSiteSubject(name)
+            : editing
+              ? editingSubject(name)
+              : inquirySubject(name)
+        ),
+        text: freeSite
+          ? freeSiteBody({ ...answers, name, email, website })
+          : editing
+            ? editingBody({ name, email, message, channel, format })
+            : inquiryBody({ name, email, message, budget, timeline }),
       }),
       signal: controller.signal,
     });
