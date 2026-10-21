@@ -17,11 +17,23 @@ import { WORKS, type Work } from "@/lib/work";
    once, through its name row, rather than twice.
 --------------------------------------------------------------------------- */
 
-/* live projects lead, since they can be opened; the ones still being built
-   follow, each group in the order the list gives it */
+/* the latest builds open the page, in this order */
+const FEATURED = [
+  "Whitecombe Roofing",
+  "Hartwell Gardens",
+  "Plainwater",
+  "Ashby Properties",
+  "Lima's No Limits",
+];
+const featured = FEATURED.flatMap((name) => WORKS.filter((w) => w.name === name));
+const rest = WORKS.filter((w) => !FEATURED.includes(w.name));
+
+/* then the other live projects, since they can be opened; the ones still
+   being built close the page, each group in the order the list gives it */
 const ORDERED = [
-  ...WORKS.filter((w) => w.href),
-  ...WORKS.filter((w) => !w.href),
+  ...featured,
+  ...rest.filter((w) => w.href),
+  ...rest.filter((w) => !w.href),
 ];
 
 function Status({ work }: { work: Work }) {

@@ -31,6 +31,26 @@ function ContactPill({ current, className }: { current: boolean; className: stri
   );
 }
 
+/* Home. On the home page it scrolls back to the top through Lenis instead
+   of re-navigating to the route you are already on. */
+function HomeLink({ current }: { current: boolean }) {
+  return (
+    <Link
+      href="/"
+      aria-current={current ? "page" : undefined}
+      onClick={(e) => {
+        if (!current) return;
+        e.preventDefault();
+        scrollToTarget(0);
+      }}
+      className={ITEM}
+    >
+      Home
+      <span className={RULE} />
+    </Link>
+  );
+}
+
 export default function Navbar() {
   const [stuck, setStuck] = useState(false);
   const pathname = usePathname();
@@ -98,6 +118,7 @@ export default function Navbar() {
           <ContactPill current={onContact} className="px-[1.5em] py-[0.85em]" />
 
           <nav className="absolute left-full ml-[clamp(18px,2.2vw,46px)] flex items-center gap-[clamp(16px,1.9vw,38px)]">
+            <HomeLink current={onHome} />
             <Link href="/portfolio" className={ITEM}>
               Portfolio
               <span className={RULE} />
@@ -112,6 +133,7 @@ export default function Navbar() {
         {/* phones: no room for a centred pill with Portfolio hanging off it,
             so the links and the pill sit together on the right edge */}
         <nav className="ml-auto flex items-center gap-[1.2em] sm:hidden">
+          <HomeLink current={onHome} />
           <Link href="/portfolio" className={ITEM}>
             Portfolio
             <span className={RULE} />

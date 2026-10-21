@@ -163,6 +163,29 @@ select:focus-visible {
   padding-inline: var(--gutter);
 }
 
+/* ---------------------------------------------------------------------------
+   Hero stage. Everything on it is placed in --u, one pixel of the Figma
+   frame "Desktop - 9" (2564 x 1683), shifted by --ox.
+
+   Desktop shows the whole frame across the viewport, but --u is also capped
+   by the height so the wordmark (glyph bottom at y 1563) never falls below
+   the fold on a short, wide screen; the frame then centres with --ox.
+   Phones show the middle 1300 of the frame, so the cards stay a readable
+   size, and the wordmark fits the viewport width instead.
+--------------------------------------------------------------------------- */
+.hero-stage {
+  --u: min(calc(100vw / 1300), calc((100svh - 24px) / 1563));
+  --ox: calc((100vw - 2564 * var(--u)) / 2);
+  --wm: calc((100vw - var(--edge) * 2) / 4.105);
+  height: calc(1683 * var(--u));
+}
+@media (min-width: 1024px) {
+  .hero-stage {
+    --u: min(var(--fig), calc((100svh - 24px) / 1563));
+    --wm: calc(573.76 * var(--u));
+  }
+}
+
 /* uppercase micro label — nav items, edge captions, meta rows */
 .micro {
   font-size: var(--fs-micro);

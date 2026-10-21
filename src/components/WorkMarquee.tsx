@@ -17,8 +17,8 @@ import { cubic, EASE_OUT } from "@/lib/anim";
 import { TEXT_LINK, TEXT_LINK_RULE } from "@/lib/ui";
 import { WORKS } from "@/lib/work";
 
-/* the curated selection; the portfolio page carries the rest */
-const STRIP = WORKS.filter((w) => w.strip !== false);
+/* every project, the same list the portfolio page shows */
+const STRIP = WORKS;
 import { MaskReveal } from "./reveal";
 
 /* how much faster the track runs while the pointer is held down */

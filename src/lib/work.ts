@@ -5,9 +5,6 @@
    `href` is the live site. Leave it off when there is nothing public to
    point at yet: the strip shows the name without a link, and the portfolio
    marks the project as in progress.
-
-   The home strip is a curated selection, so newer projects can stay off it
-   with `strip: false` and still appear in the portfolio.
 --------------------------------------------------------------------------- */
 
 export type Work = {
@@ -19,8 +16,6 @@ export type Work = {
   summary: string;
   href?: string;
   alt: string;
-  /* false keeps the project off the home page strip */
-  strip?: boolean;
   /* a studio project built without a client; tagged on the portfolio */
   concept?: boolean;
 };
@@ -131,7 +126,6 @@ export const WORKS: Work[] = [
     href: "https://limasnolimits-demo.vercel.app/",
     alt: "Lima's No Limits website. 'Lima's Bathrooms and Floors' set in heavy type over a finished marble bathroom.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/one-wood-floors.webp",
@@ -142,7 +136,6 @@ export const WORKS: Work[] = [
     href: "https://1-wood-floors.vercel.app/",
     alt: "1 Wood Floors website. 'Hardwood Flooring' in large italic serif around a plank shown half raw, half stained.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/meridian-solutions.webp",
@@ -153,7 +146,6 @@ export const WORKS: Work[] = [
     href: "https://meridrian-solutions.vercel.app/",
     alt: "Meridian Solutions website. 'Operators, not consultants. We fix what broke' above a warehouse with its loading docks.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/veryra.webp",
@@ -163,7 +155,6 @@ export const WORKS: Work[] = [
       "Scroll-driven launch site for a face mist. The bottle drifts through clouds and type as you move down the page.",
     alt: "Veryra website. A lilac face mist bottle rising through clouds in front of the words Radiant, Pure, and Soft.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/arcus-real-estate.webp",
@@ -171,9 +162,9 @@ export const WORKS: Work[] = [
     kind: "Website",
     summary:
       "Site for a real estate developer building residential towers and villa complexes, with private inquiries handled one to one.",
+    href: "https://arcus-real-estate-two.vercel.app/",
     alt: "Arcus Real Estate website. The Arcus script wordmark over 'Real Estate' against glass towers and a blue sky.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/marlows-coffee.webp",
@@ -184,7 +175,6 @@ export const WORKS: Work[] = [
     href: "https://marlows-coffee-demo.vercel.app/",
     alt: "Marlows Coffee website. The name spelled out in coffee beans beside an iced latte on a warm orange background.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/basin-pools.webp",
@@ -195,7 +185,6 @@ export const WORKS: Work[] = [
     href: "https://basin-pools-demo.vercel.app/",
     alt: "Basin Pools website. 'Basin Pools, your dream pool starts here' over a garden pool, with project counts down the side.",
     concept: true,
-    strip: false,
   },
   {
     src: "/work/ashby-properties.webp",
@@ -206,6 +195,35 @@ export const WORKS: Work[] = [
     href: "https://ashby-properties.vercel.app/",
     alt: "Ashby Properties website. The name set in tall condensed type beside an apartment block shot from below.",
     concept: true,
-    strip: false,
+  },
+  {
+    src: "/work/whitcombe-roofing.webp",
+    name: "Whitecombe Roofing",
+    kind: "Website",
+    summary:
+      "Site for a pitched roofing firm, with a scroll that strips a roof back to the rafters and lays it again, layer by layer, to show what doing it properly means.",
+    href: "https://whitcombe-roofing.vercel.app/",
+    alt: "Whitecombe Roofing website. 'Every layer, done properly' beside two roofers handing tiles across a slate roof.",
+    concept: true,
+  },
+  {
+    src: "/work/hartwell-gardens.webp",
+    name: "Hartwell Gardens",
+    kind: "Website",
+    summary:
+      "Site for a garden design and build crew in Surrey and Hampshire, with finished gardens fanned across the hero, each tagged with its town, budget, and build time.",
+    href: "https://hartwell-gardens.vercel.app/",
+    alt: "Hartwell Gardens website. The name in a tall serif over deep green, with photos of finished gardens fanned along the bottom.",
+    concept: true,
+  },
+  {
+    src: "/work/plainwater.webp",
+    name: "Plainwater",
+    kind: "Website",
+    summary:
+      "Site for a pressure washing firm cleaning patios, driveways, render and roofs, with a hose that runs through the wordmark and before and after jobs side by side.",
+    href: "https://plaintwater.vercel.app/",
+    alt: "Plainwater website. 'Plainwater Washing' in a large serif, crossed by a blue hose from a pressure washer, between before and after photos of a patio.",
+    concept: true,
   },
 ];
