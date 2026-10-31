@@ -31,7 +31,7 @@ const WORDS = [
   { text: "Code", x: 1935, y: 626, accent: true },
   { text: "Without", x: 112, y: 842, accent: false },
   { text: "Any", x: 711, y: 1268, accent: false },
-  { text: "Handoffs", x: 1416, y: 1406, accent: false },
+  { text: "Handoffs", x: 1416, y: 1406, accent: true },
 ];
 
 const PARAS = [
