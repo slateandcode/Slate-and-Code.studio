@@ -4,12 +4,20 @@ import Link from "next/link";
 import { FAQ } from "@/lib/services";
 import { LINKS } from "@/lib/links";
 import { MaskReveal } from "./reveal";
+import Rich from "./Rich";
 
 /*
   Answers stay on the page rather than hiding behind an accordion, the same
   call made for the process descriptions on the home page.
+
+  /services renders the studio-wide questions; the service and industry
+  pages pass their own, which may carry inline links.
 */
-export default function Faq() {
+export default function Faq({
+  items = FAQ,
+}: {
+  items?: { q: string; a: string }[];
+}) {
   return (
     <section id="faq" className="gut py-[clamp(70px,9vw,190px)]">
       <MaskReveal inView amount={0.4} className="text-center">
@@ -22,7 +30,7 @@ export default function Faq() {
       </MaskReveal>
 
       <div className="mt-[clamp(46px,6vw,140px)] border-b border-[var(--rule)]">
-        {FAQ.map(({ q, a }) => (
+        {items.map(({ q, a }) => (
           <div
             key={q}
             className="grid grid-cols-1 gap-[clamp(10px,1.4vw,34px)] border-t border-[var(--rule)] py-[clamp(24px,2.8vw,58px)] md:grid-cols-[minmax(0,1fr)_minmax(0,1.25fr)]"
@@ -31,7 +39,7 @@ export default function Faq() {
               {q}
             </h3>
             <p className="max-w-[56ch] text-[length:var(--fs-body)] leading-[1.45] text-[var(--fg-70)]">
-              {a}
+              <Rich text={a} />
             </p>
           </div>
         ))}

@@ -32,10 +32,15 @@ export function pageMetadata({
   title,
   description,
   path,
+  ownImage = false,
 }: {
   title: string;
   description: string;
   path: string;
+  /* the route draws its own card with an opengraph-image file. The shared
+     card is then left off both fields: the file sets og:image, and X falls
+     back to og:image when twitter:image is absent. */
+  ownImage?: boolean;
 }): Metadata {
   const full = `${title} · ${SITE_NAME}`;
   return {
@@ -48,13 +53,13 @@ export function pageMetadata({
       url: path,
       title: full,
       description,
-      images: [OG_IMAGE],
+      ...(!ownImage && { images: [OG_IMAGE] }),
     },
     twitter: {
       card: "summary_large_image",
       title: full,
       description,
-      images: [OG_IMAGE.url],
+      ...(!ownImage && { images: [OG_IMAGE.url] }),
     },
   };
 }

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { LANDING_INDEX, landingPath } from "@/lib/landing-index";
 import { SITE_URL } from "@/lib/site";
 
 /* lastModified is the date the page's content last really changed, not the
@@ -12,10 +13,18 @@ const ROUTES: {
 }[] = [
   { path: "/", modified: "2026-09-27", changeFrequency: "monthly", priority: 1 },
   { path: "/portfolio", modified: "2026-09-27", changeFrequency: "monthly", priority: 0.8 },
-  { path: "/services", modified: "2026-09-27", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/services", modified: "2026-10-31", changeFrequency: "monthly", priority: 0.8 },
   { path: "/contact", modified: "2026-09-27", changeFrequency: "yearly", priority: 0.7 },
   { path: "/privacy", modified: "2026-10-08", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms", modified: "2026-09-27", changeFrequency: "yearly", priority: 0.3 },
+  /* the service and industry pages, each with its own date in
+     landing-index.ts. They sit just under the pages that link to them. */
+  ...LANDING_INDEX.map((l) => ({
+    path: landingPath(l),
+    modified: l.modified,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  })),
 ];
 
 export default function sitemap(): MetadataRoute.Sitemap {

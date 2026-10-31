@@ -12,9 +12,12 @@
    The registered details stay on /privacy and /terms.
 --------------------------------------------------------------------------- */
 
+import type { Landing } from "./landing";
+import { plainText } from "./landing";
+import { BUILDERS_HUB, landingLink, landingPath } from "./landing-index";
 import { LEGAL } from "./legal";
 import { LINKS } from "./links";
-import { FAQ, PACKAGES } from "./services";
+import { FAQ, PACKAGES, type Package } from "./services";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./site";
 import { WORKS } from "./work";
 
@@ -53,6 +56,10 @@ export function organizationSchema() {
           "Landing pages",
           "Custom business software",
           "3D websites",
+          "Web design for custom builders",
+          "Web design for campervan converters",
+          "Web design for horsebox builders",
+          "Web design for garden room builders",
         ],
         contactPoint: {
           "@type": "ContactPoint",
@@ -74,16 +81,27 @@ export function organizationSchema() {
   };
 }
 
-/* Home > page, for every route below the home page */
-export function breadcrumbSchema(name: string, path: string) {
+/* Home > ... > page, for every route below the home page. The trail is
+   every step after Home, ending on the page itself. */
+export function breadcrumbTrail(trail: { name: string; path: string }[]) {
   return {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name, item: abs(path) },
+      ...trail.map(({ name, path }, i) => ({
+        "@type": "ListItem",
+        position: i + 2,
+        name,
+        item: abs(path),
+      })),
     ],
   };
+}
+
+/* Home > page, for a route one level down */
+export function breadcrumbSchema(name: string, path: string) {
+  return breadcrumbTrail([{ name, path }]);
 }
 
 /* "$1,500" -> 1500; "Custom quote" -> null */
@@ -92,52 +110,57 @@ const amount = (s: string) => {
   return n > 0 ? n : null;
 };
 
+/* a package's starting prices as offers, one-time and (where it has one)
+   monthly; the custom quote has neither and gets no offers */
+function offersFor(p: Package) {
+  const once = amount(p.price);
+  if (!once) return {};
+  const monthly = p.monthly ? amount(p.monthly.price) : null;
+  return {
+    offers: [
+      {
+        "@type": "Offer",
+        name: `${p.name}, one-time`,
+        priceSpecification: {
+          "@type": "PriceSpecification",
+          minPrice: once,
+          priceCurrency: "USD",
+        },
+      },
+      ...(monthly
+        ? [
+            {
+              "@type": "Offer",
+              name: `${p.name}, monthly`,
+              priceSpecification: {
+                "@type": "UnitPriceSpecification",
+                minPrice: monthly,
+                priceCurrency: "USD",
+                unitCode: "MON",
+              },
+            },
+          ]
+        : []),
+    ],
+  };
+}
+
 /* the four packages as services with their starting prices, and the FAQ as
    it reads on the page */
 export function servicesSchema() {
   return {
     "@context": "https://schema.org",
     "@graph": [
-      ...PACKAGES.map((p) => {
-        const once = amount(p.price);
-        const monthly = p.monthly ? amount(p.monthly.price) : null;
-        return {
-          "@type": "Service",
-          name: p.name,
-          serviceType: "Web design and development",
-          description: p.summary,
-          provider: ORG,
-          areaServed: "Worldwide",
-          url: `${SITE_URL}/services`,
-          ...(once && {
-            offers: [
-              {
-                "@type": "Offer",
-                name: `${p.name}, one-time`,
-                priceSpecification: {
-                  "@type": "PriceSpecification",
-                  minPrice: once,
-                  priceCurrency: "USD",
-                },
-              },
-              ...(monthly
-                ? [
-                    {
-                      "@type": "Offer",
-                      name: `${p.name}, monthly`,
-                      priceSpecification: {
-                        "@type": "UnitPriceSpecification",
-                        minPrice: monthly,
-                        priceCurrency: "USD",
-                        unitCode: "MON",
-                      },
-                    },
-                  ]
-                : []),
-            ],
-          }),
-        };
-      }),
+      ...PACKAGES.map((p) => ({
+        "@type": "Service",
+        name: p.name,
+        serviceType: "Web design and development",
+        description: p.summary,
+        provider: ORG,
+        areaServed: "Worldwide",
+        url: `${SITE_URL}/services`,
+        ...offersFor(p),
+      })),
       {
         "@type": "FAQPage",
         "@id": `${SITE_URL}/services#faq`,
@@ -172,7 +195,11 @@ export function portfolioSchema(description: string) {
           "@type": "CreativeWork",
           name: w.name,
           description: w.summary,
-          genre: w.concept ? `${w.kind}, concept` : w.kind,
+          genre: w.preview
+            ? `${w.kind}, preview`
+            : w.concept
+              ? `${w.kind}, concept`
+              : w.kind,
           image: `${SITE_URL}${w.src}`,
           creator: ORG,
           ...(w.href && { url: w.href }),
@@ -180,4 +207,80 @@ export function portfolioSchema(description: string) {
       })),
     },
   };
+}
+
+/* A service or industry page: the page itself, the service it sells with
+   the matching packages' prices, its questions, and where it sits in the
+   site. Builder trades sit under the custom builders hub; services sit
+   under /services. */
+export function landingSchema(page: Landing) {
+  const path = landingPath(page);
+  const url = abs(path);
+  const name = landingLink(page.slug).name;
+
+  const trail =
+    page.section === "services"
+      ? [{ name: "Services", path: "/services" }]
+      : page.slug === BUILDERS_HUB
+        ? []
+        : [{ name: landingLink(BUILDERS_HUB).name, path: landingPath(landingLink(BUILDERS_HUB)) }];
+
+  const packs = page.service.packages
+    .map((n) => PACKAGES.find((p) => p.name === n))
+    .filter((p): p is Package => Boolean(p));
+
+  return [
+    breadcrumbTrail([...trail, { name, path }]),
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": url,
+          url,
+          name: page.title,
+          description: page.description,
+          inLanguage: "en",
+          isPartOf: { "@id": SITE_ID },
+          about: { "@id": `${url}#service` },
+          publisher: ORG,
+        },
+        {
+          "@type": "Service",
+          "@id": `${url}#service`,
+          name: page.title,
+          serviceType: page.service.type,
+          description: page.lead,
+          provider: ORG,
+          areaServed: "Worldwide",
+          url,
+          ...(page.service.audience && {
+            audience: {
+              "@type": "BusinessAudience",
+              audienceType: page.service.audience,
+            },
+          }),
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: `${page.title} packages`,
+            itemListElement: packs.map((p) => ({
+              "@type": "Service",
+              name: p.name,
+              description: p.summary,
+              ...offersFor(p),
+            })),
+          },
+        },
+        {
+          "@type": "FAQPage",
+          "@id": `${url}#faq`,
+          mainEntity: page.faq.map(({ q, a }) => ({
+            "@type": "Question",
+            name: q,
+            acceptedAnswer: { "@type": "Answer", text: plainText(a) },
+          })),
+        },
+      ],
+    },
+  ];
 }

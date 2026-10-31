@@ -206,6 +206,19 @@ select:focus-visible {
   letter-spacing: 0;
 }
 
+/* The service and industry headlines: the same masked rise as MaskReveal,
+   on the house ease, but in CSS so it plays from first paint rather than
+   after hydration. Each line sits in an overflow-hidden span. The reduced
+   motion rule at the bottom of this file collapses it to the end state. */
+.rise {
+  animation: rise 1.1s cubic-bezier(0.335, 0.009, 0, 0.994) both;
+}
+@keyframes rise {
+  from {
+    transform: translateY(110%);
+  }
+}
+
 @keyframes blink {
   0%,
   100% {

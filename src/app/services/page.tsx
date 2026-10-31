@@ -6,6 +6,7 @@ import Faq from "@/components/Faq";
 import Footer from "@/components/Footer";
 import Invert from "@/components/Invert";
 import JsonLd from "@/components/JsonLd";
+import { LandingLinks } from "@/components/Landing";
 import { breadcrumbSchema, servicesSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/site";
 
@@ -29,6 +30,9 @@ export default function Services() {
       <Navbar />
       <ServicesHero />
       <Packages />
+      {/* each service, and each trade the studio builds for, on a page of
+          its own with the detail the cards above leave out */}
+      <LandingLinks title={["By service", "and trade"]} className="gut" />
       <Faq />
       <Footer />
     </main>

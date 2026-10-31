@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, useScroll, useSpring, useTransform } from "motion/react";
 import { PiInstagramLogo, PiEnvelopeSimple } from "react-icons/pi";
+import { LANDING_INDEX, landingPath } from "@/lib/landing-index";
 import { LEGAL } from "@/lib/legal";
 import { OPEN_CONSENT_EVENT } from "@/lib/pixel";
 import { LINKS, MAILTO } from "@/lib/links";
@@ -111,29 +112,47 @@ export default function Footer() {
             </a>
           </div>
 
-          {/* each item is padded up to a 24px tap target without moving the
-              column: the gap shrinks by what the padding adds */}
-          <nav className="micro flex flex-col items-start gap-[0.2em] text-[var(--fg-70)] sm:items-end">
-            {NAV.map((n) =>
-              onHome && n.target ? (
-                <button
-                  key={n.label}
-                  onClick={() => scrollToTarget(n.target as string)}
-                  className="inline-flex min-h-[24px] items-center transition-colors duration-300 hover:text-accent"
-                >
-                  {n.label}
-                </button>
-              ) : (
+          {/* the site nav, and beside it every service and industry page,
+              so each one is a link away from anywhere on the site. Each item
+              is padded up to a 24px tap target without moving the column:
+              the gap shrinks by what the padding adds */}
+          <div className="flex gap-[clamp(28px,4vw,90px)]">
+            <nav className="micro flex flex-col items-start gap-[0.2em] text-[var(--fg-70)] sm:items-end">
+              {NAV.map((n) =>
+                onHome && n.target ? (
+                  <button
+                    key={n.label}
+                    onClick={() => scrollToTarget(n.target as string)}
+                    className="inline-flex min-h-[24px] items-center transition-colors duration-300 hover:text-accent"
+                  >
+                    {n.label}
+                  </button>
+                ) : (
+                  <Link
+                    key={n.label}
+                    href={n.href}
+                    className="inline-flex min-h-[24px] items-center transition-colors duration-300 hover:text-accent"
+                  >
+                    {n.label}
+                  </Link>
+                )
+              )}
+            </nav>
+            <nav
+              aria-label="Services and industries"
+              className="micro flex flex-col items-start gap-[0.2em] text-[var(--fg-70)] sm:items-end"
+            >
+              {LANDING_INDEX.map((l) => (
                 <Link
-                  key={n.label}
-                  href={n.href}
+                  key={l.slug}
+                  href={landingPath(l)}
                   className="inline-flex min-h-[24px] items-center transition-colors duration-300 hover:text-accent"
                 >
-                  {n.label}
+                  {l.name}
                 </Link>
-              )
-            )}
-          </nav>
+              ))}
+            </nav>
+          </div>
         </div>
 
         {/* the mark, assembling as you reach the end of the page. Sits on the
