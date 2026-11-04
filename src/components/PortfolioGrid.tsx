@@ -9,7 +9,6 @@ import {
   type ReactNode,
 } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import {
   AnimatePresence,
   motion,
@@ -20,6 +19,7 @@ import {
 import { EASE_HOUSE } from "@/lib/anim";
 import { TEXT_LINK, TEXT_LINK_RULE } from "@/lib/ui";
 import { WORKS, type Work } from "@/lib/work";
+import { CtaBlock } from "./PillCTA";
 
 /* ---------------------------------------------------------------------------
    Every project as a staged scene, one after another down the page, full
@@ -420,18 +420,12 @@ export default function PortfolioGrid() {
 
       {/* the ask, once the work has made the case */}
       <div className="gut">
-        <div className="mt-[clamp(60px,7vw,160px)] flex flex-wrap items-baseline gap-x-[clamp(18px,2vw,44px)] gap-y-[0.8em] border-t border-[var(--rule)] pt-[clamp(28px,3vw,60px)]">
-          <p className="text-[length:var(--fs-lead)] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--fg)]">
-            Have something like this in mind?
-          </p>
-          <Link
-            href="/contact"
-            className="group relative text-[length:var(--fs-lead)] font-medium leading-[1.2] tracking-[-0.02em] text-accent"
-          >
-            Start a project
-            <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100" />
-          </Link>
-        </div>
+        <CtaBlock
+          prompt="Have something like this in mind?"
+          label="Start a project"
+          href="/contact"
+          className="mt-[clamp(60px,7vw,160px)] border-t border-[var(--rule)] pt-[clamp(40px,5vw,110px)]"
+        />
       </div>
     </section>
   );

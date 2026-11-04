@@ -4,7 +4,7 @@ import Footer from "./Footer";
 import Faq from "./Faq";
 import Invert from "./Invert";
 import Rich from "./Rich";
-import { ContactButton } from "./ContactCTA";
+import { PillButton } from "./PillCTA";
 import { MaskReveal, WordsReveal } from "./reveal";
 import type { Block, Heading, Landing } from "@/lib/landing";
 import { LANDING_INDEX, landingPath } from "@/lib/landing-index";
@@ -69,7 +69,7 @@ function Hero({ page }: { page: Landing }) {
             {page.intro}
           </p>
           <div className="mt-[1.6em] flex flex-wrap items-center gap-x-[clamp(20px,2vw,40px)] gap-y-[1em]">
-            <ContactButton label="Start a project" />
+            <PillButton label="Start a project" href="/contact" />
             <Link
               href="/portfolio"
               className={`${TEXT_LINK} inline-flex min-h-[24px] items-center`}

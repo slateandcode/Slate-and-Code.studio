@@ -54,6 +54,32 @@ export const FORMATS = [
   "Not sure yet",
 ];
 
+/* what the inquiry form asks. /motion uses the same form with its own
+   copy (FORM in motion.ts); `kind` is how /api/contact tells them apart */
+export type FormCopy = {
+  kind: "editing" | "motion";
+  subject: string;
+  linkLabel: string;
+  linkPlaceholder: string;
+  formatLabel: string;
+  formatPlaceholder: string;
+  formats: readonly string[];
+  emailPlaceholder: string;
+  messagePlaceholder: string;
+};
+
+export const EDITING_FORM: FormCopy = {
+  kind: "editing",
+  subject: "Editing inquiry",
+  linkLabel: "Channel",
+  linkPlaceholder: "youtube.com/@yourchannel",
+  formatLabel: "Format",
+  formatPlaceholder: "What needs editing?",
+  formats: FORMATS,
+  emailPlaceholder: "you@channel.com",
+  messagePlaceholder: "How many videos, how long, and what style are you after?",
+};
+
 export type EditingInquiry = {
   name: string;
   email: string;
@@ -62,14 +88,17 @@ export type EditingInquiry = {
   format: string;
 };
 
-export const editingSubject = (name: string) =>
-  `Editing inquiry${name ? ` from ${name}` : ""}`;
+export const editingSubject = (name: string, subject = EDITING_FORM.subject) =>
+  `${subject}${name ? ` from ${name}` : ""}`;
 
-export function editingBody({ name, email, message, channel, format }: EditingInquiry) {
+export function editingBody(
+  { name, email, message, channel, format }: EditingInquiry,
+  linkLabel = EDITING_FORM.linkLabel
+) {
   return [
     message,
     "",
-    channel ? `Channel: ${channel}` : "",
+    channel ? `${linkLabel}: ${channel}` : "",
     format ? `Format: ${format}` : "",
     "",
     name,

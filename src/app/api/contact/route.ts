@@ -9,6 +9,7 @@ import {
   inquirySubject,
 } from "@/lib/inquiry";
 import { FORMATS, editingBody, editingSubject } from "@/lib/editing";
+import { FORM as MOTION_FORM } from "@/lib/motion";
 import {
   QUESTIONS,
   WEBSITE_MAX,
@@ -85,8 +86,11 @@ export async function POST(req: Request) {
   const message = str(data.message);
   const budget = str(data.budget);
   const timeline = str(data.timeline);
-  /* the unlisted /editing form posts here too, with its own two fields */
-  const editing = data.kind === "editing";
+  /* the unlisted /editing form posts here too, with its own two fields,
+     and so does the /motion form, which is the same form asking about reels */
+  const motion = data.kind === "motion";
+  const editing = data.kind === "editing" || motion;
+  const formats: readonly string[] = motion ? MOTION_FORM.formats : FORMATS;
   const channel = oneLine(str(data.channel));
   const format = str(data.format);
   /* so does the /get-your-free-website campaign: three picked answers and
@@ -116,8 +120,8 @@ export async function POST(req: Request) {
   }
   /* the two selects only ever send values off their own lists */
   if (editing) {
-    if (channel.length > 300 || (format && !FORMATS.includes(format))) {
-      return fail("Check the channel link and the format.", 400);
+    if (channel.length > 300 || (format && !formats.includes(format))) {
+      return fail(`Check the ${motion ? "account" : "channel"} link and the format.`, 400);
     }
   } else if (
     !freeSite &&
@@ -161,13 +165,16 @@ export async function POST(req: Request) {
           freeSite
             ? freeSiteSubject(name)
             : editing
-              ? editingSubject(name)
+              ? editingSubject(name, motion ? MOTION_FORM.subject : undefined)
               : inquirySubject(name)
         ),
         text: freeSite
           ? freeSiteBody({ ...answers, name, email, website })
           : editing
-            ? editingBody({ name, email, message, channel, format })
+            ? editingBody(
+                { name, email, message, channel, format },
+                motion ? MOTION_FORM.linkLabel : undefined
+              )
             : inquiryBody({ name, email, message, budget, timeline }),
       }),
       signal: controller.signal,

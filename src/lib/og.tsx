@@ -5,7 +5,7 @@ import type { Landing } from "./landing";
 import { SITE_NAME } from "./site";
 
 /* ---------------------------------------------------------------------------
-   The share card for a service or industry page: its headline set in Thunder
+   The share card for a service or industry page, and for /motion: its headline set in Thunder
    on ink, the way the page opens, with the studio name and address on a
    quiet line above.
 
@@ -24,7 +24,7 @@ const PAD = 64;
 
 const font = (name: string) => readFile(join(process.cwd(), "src/lib/og", `${name}.ttf`));
 
-export async function landingCard(page: Landing) {
+export async function landingCard(page: Pick<Landing, "h1" | "h1Em">) {
   const [thunder, neue] = await Promise.all([font("Thunder-Bold"), font("NeueMontreal-Medium")]);
 
   /* the headline fills the width, unless its lines would run out of height

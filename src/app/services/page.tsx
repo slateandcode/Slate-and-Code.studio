@@ -6,6 +6,7 @@ import Faq from "@/components/Faq";
 import Footer from "@/components/Footer";
 import Invert from "@/components/Invert";
 import JsonLd from "@/components/JsonLd";
+import { CtaBlock } from "@/components/PillCTA";
 import { LandingLinks } from "@/components/Landing";
 import { breadcrumbSchema, servicesSchema } from "@/lib/schema";
 import { pageMetadata } from "@/lib/site";
@@ -30,6 +31,12 @@ export default function Services() {
       <Navbar />
       <ServicesHero />
       <Packages />
+      <CtaBlock
+        prompt="Seen the one that fits? It starts with a short call."
+        label="Start a project"
+        href="/contact"
+        className="gut pb-[clamp(70px,9vw,190px)]"
+      />
       {/* each service, and each trade the studio builds for, on a page of
           its own with the detail the cards above leave out */}
       <LandingLinks title={["By service", "and trade"]} className="gut" />

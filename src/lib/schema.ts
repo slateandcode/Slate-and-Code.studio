@@ -17,6 +17,7 @@ import { plainText } from "./landing";
 import { BUILDERS_HUB, landingLink, landingPath } from "./landing-index";
 import { LEGAL } from "./legal";
 import { LINKS } from "./links";
+import { FAQ as MOTION_FAQ, MOTION, PLANS } from "./motion";
 import { FAQ, PACKAGES, type Package } from "./services";
 import { OG_IMAGE, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "./site";
 import { WORKS } from "./work";
@@ -56,6 +57,8 @@ export function organizationSchema() {
           "Landing pages",
           "Custom business software",
           "3D websites",
+          "Motion design",
+          "Video editing for reels",
           "Web design for custom builders",
           "Web design for campervan converters",
           "Web design for horsebox builders",
@@ -207,6 +210,83 @@ export function portfolioSchema(description: string) {
       })),
     },
   };
+}
+
+/* /motion: the page, reel editing as a service with each plan's price per
+   reel or per month, and its questions */
+export function motionSchema() {
+  const url = abs(MOTION.path);
+  return [
+    breadcrumbSchema("Motion design", MOTION.path),
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebPage",
+          "@id": url,
+          url,
+          name: MOTION.title,
+          description: MOTION.description,
+          inLanguage: "en",
+          isPartOf: { "@id": SITE_ID },
+          about: { "@id": `${url}#service` },
+          publisher: ORG,
+        },
+        {
+          "@type": "Service",
+          "@id": `${url}#service`,
+          name: MOTION.title,
+          serviceType: "Video editing and motion design",
+          description: MOTION.lead,
+          provider: ORG,
+          areaServed: "Worldwide",
+          url,
+          audience: {
+            "@type": "BusinessAudience",
+            audienceType: "Founders, coaches and brands posting short-form video",
+          },
+          hasOfferCatalog: {
+            "@type": "OfferCatalog",
+            name: `${MOTION.title} plans`,
+            itemListElement: PLANS.map((p) => {
+              /* "$75–150" is a range, read as its two ends; "$960" is one */
+              const [low, high] = (p.price.match(/\d[\d,]*/g) ?? []).map(amount);
+              const price = high
+                ? { minPrice: low, maxPrice: high }
+                : p.priceLead
+                  ? { minPrice: low }
+                  : { price: low };
+              return {
+                "@type": "Offer",
+                name: p.name,
+                description: p.summary,
+                ...(low &&
+                  p.unit && {
+                    priceSpecification: {
+                      "@type": "UnitPriceSpecification",
+                      ...price,
+                      priceCurrency: "USD",
+                      ...(p.unit === "month"
+                        ? { unitCode: "MON" }
+                        : { unitText: "reel" }),
+                    },
+                  }),
+              };
+            }),
+          },
+        },
+        {
+          "@type": "FAQPage",
+          "@id": `${url}#faq`,
+          mainEntity: MOTION_FAQ.map(({ q, a }) => ({
+            "@type": "Question",
+            name: q,
+            acceptedAnswer: { "@type": "Answer", text: plainText(a) },
+          })),
+        },
+      ],
+    },
+  ];
 }
 
 /* A service or industry page: the page itself, the service it sells with

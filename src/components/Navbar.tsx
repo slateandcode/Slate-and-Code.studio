@@ -110,8 +110,8 @@ export default function Navbar() {
         {/*
           Contact sits on the exact centre line of the page: it is the only
           in-flow child of this wrapper, so the -translate-x-1/2 centres the
-          pill itself rather than the pill plus the links. Portfolio and Services
-          then hang off its right edge with `left-full`, which keeps them
+          pill itself rather than the pill plus the links. Portfolio, Services and
+          Motion then hang off its right edge with `left-full`, which keeps them
           close to it instead of pushed out to the page margin.
         */}
         <div className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 items-center sm:flex">
@@ -127,13 +127,18 @@ export default function Navbar() {
               Services
               <span className={RULE} />
             </Link>
+            <Link href="/motion" className={ITEM}>
+              Motion
+              <span className={RULE} />
+            </Link>
           </nav>
         </div>
 
         {/* phones: no room for a centred pill with Portfolio hanging off it,
-            so the links and the pill sit together on the right edge */}
-        <nav className="ml-auto flex items-center gap-[1.2em] sm:hidden">
-          <HomeLink current={onHome} />
+            so the links and the pill sit together on the right edge. Home is
+            left to the S&C mark here: with Motion in the row, four links and
+            the pill do not fit across a 360px screen. */}
+        <nav className="ml-auto flex items-center gap-[0.9em] sm:hidden">
           <Link href="/portfolio" className={ITEM}>
             Portfolio
             <span className={RULE} />
@@ -142,7 +147,11 @@ export default function Navbar() {
             Services
             <span className={RULE} />
           </Link>
-          <ContactPill current={onContact} className="px-[1.2em] py-[0.8em]" />
+          <Link href="/motion" className={ITEM}>
+            Motion
+            <span className={RULE} />
+          </Link>
+          <ContactPill current={onContact} className="px-[1em] py-[0.8em]" />
         </nav>
       </div>
     </motion.header>

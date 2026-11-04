@@ -5,23 +5,24 @@ import { cubic, EASE_OUT } from "@/lib/anim";
 import { LINKS } from "@/lib/links";
 import { HONEYPOT, LIMITS } from "@/lib/inquiry";
 import {
-  FORMATS,
+  EDITING_FORM,
   editingBody,
   editingSubject,
   type EditingInquiry,
+  type FormCopy,
 } from "@/lib/editing";
 import Listbox from "./Listbox";
 
 /* The editing inquiry form: the contact form's fields and button, with a
    channel link and a format in place of budget and timeline. Posts to the
-   same /api/contact with kind "editing", and falls back to mailto the same way. */
+   same /api/contact with kind "editing", and falls back to mailto the same way.
+   /motion passes its own copy and kind, and gets the same form for reels. */
 
 const FIELD =
   "w-full rounded-none border-0 border-b border-[var(--rule)] bg-transparent py-[0.7em] text-[length:var(--fs-body)] text-[var(--fg)] caret-accent outline-none transition-colors duration-300 placeholder:text-[var(--fg-28)] focus:border-accent";
 const LABEL = "micro mb-[0.4em] block text-[var(--fg-70)]";
 const BUTTON_FACE =
   "flex items-center gap-[0.9em] px-[clamp(18px,1.5vw,32px)] py-[clamp(11px,0.85vw,18px)] text-[length:var(--fs-small)] font-medium tracking-[-0.01em]";
-const GROUPS = [{ options: FORMATS.map((f) => ({ value: f, label: f })) }];
 const SOFT_LINK =
   "underline decoration-[var(--rule)] underline-offset-4 transition-colors duration-300 hover:text-accent";
 
@@ -39,10 +40,11 @@ type Status =
   | { kind: "mailto"; href: string }
   | { kind: "error"; message: string };
 
-export default function EditingForm() {
+export default function EditingForm({ copy = EDITING_FORM }: { copy?: FormCopy }) {
   const [status, setStatus] = useState<Status>({ kind: "idle" });
   const messageRef = useRef<HTMLTextAreaElement>(null);
-  const id = (f: string) => `editing-${f}`;
+  const id = (f: string) => `${copy.kind}-${f}`;
+  const groups = [{ options: copy.formats.map((f) => ({ value: f, label: f })) }];
 
   useLayoutEffect(() => {
     fitToContent(messageRef.current);
@@ -65,8 +67,8 @@ export default function EditingForm() {
     };
     const fallBack = () => {
       const href = `mailto:${LINKS.email}?subject=${encodeURIComponent(
-        editingSubject(inquiry.name)
-      )}&body=${encodeURIComponent(editingBody(inquiry))}`;
+        editingSubject(inquiry.name, copy.subject)
+      )}&body=${encodeURIComponent(editingBody(inquiry, copy.linkLabel))}`;
       window.location.href = href;
       setStatus({ kind: "mailto", href });
     };
@@ -77,7 +79,7 @@ export default function EditingForm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...inquiry,
-          kind: "editing",
+          kind: copy.kind,
           [HONEYPOT]: read(HONEYPOT),
         }),
       });
@@ -142,20 +144,20 @@ export default function EditingForm() {
             required
             maxLength={LIMITS.email}
             autoComplete="email"
-            placeholder="you@channel.com"
+            placeholder={copy.emailPlaceholder}
             className={FIELD}
           />
         </div>
         <div>
           <label htmlFor={id("channel")} className={LABEL}>
-            Channel link
+            {copy.linkLabel} link
           </label>
           <input
             id={id("channel")}
             name="channel"
             type="text"
             maxLength={300}
-            placeholder="youtube.com/@yourchannel"
+            placeholder={copy.linkPlaceholder}
             className={FIELD}
           />
         </div>
@@ -165,14 +167,14 @@ export default function EditingForm() {
             htmlFor={id("format")}
             className={LABEL}
           >
-            Format
+            {copy.formatLabel}
           </label>
           <Listbox
             id={id("format")}
             name="format"
             labelId={id("format-label")}
-            groups={GROUPS}
-            placeholder="What needs editing?"
+            groups={groups}
+            placeholder={copy.formatPlaceholder}
             fieldClassName={FIELD}
           />
         </div>
@@ -188,7 +190,7 @@ export default function EditingForm() {
             rows={1}
             onInput={(e) => fitToContent(e.currentTarget)}
             maxLength={LIMITS.message}
-            placeholder="How many videos, how long, and what style are you after?"
+            placeholder={copy.messagePlaceholder}
             className={`${FIELD} block max-h-[16em] resize-none overflow-y-auto leading-[1.45]`}
           />
         </div>

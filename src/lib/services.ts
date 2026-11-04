@@ -1,8 +1,10 @@
 /* ---------------------------------------------------------------------------
    Services content, lifted from the live slateandcode.studio services page.
 
-   Short-form editing and the monthly reels system were dropped in Aug 2026 —
-   the studio no longer sells them. Four services remain and they read as a
+   Short-form editing and the monthly reels system were dropped in Aug 2026.
+   Reels came back in Nov 2026 as talking-head motion design, sold on its own
+   page, /motion, with its prices in motion.ts rather than here. Four services
+   remain on /services and they read as a
    ladder: presence, then a full site, then a custom tool, then all of it
    built together. The layout in Packages.tsx leans on that order.
 

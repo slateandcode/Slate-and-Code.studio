@@ -1,8 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { FAQ } from "@/lib/services";
 import { LINKS } from "@/lib/links";
+import { CtaBlock } from "./PillCTA";
 import { MaskReveal } from "./reveal";
 import Rich from "./Rich";
 
@@ -12,11 +12,24 @@ import Rich from "./Rich";
 
   /services renders the studio-wide questions; the service and industry
   pages pass their own, which may carry inline links.
+
+  The questions end on the site's ask. A page whose own ask sits right
+  around them passes `ask={null}` so it is not made twice in a row.
 */
+type Ask = { prompt: string; label: string; href: string };
+
+const DEFAULT_ASK: Ask = {
+  prompt: "Not sure which package fits?",
+  label: "Send a message",
+  href: "/contact",
+};
+
 export default function Faq({
   items = FAQ,
+  ask = DEFAULT_ASK,
 }: {
   items?: { q: string; a: string }[];
+  ask?: Ask | null;
 }) {
   return (
     <section id="faq" className="gut py-[clamp(70px,9vw,190px)]">
@@ -45,26 +58,19 @@ export default function Faq({
         ))}
       </div>
 
-      <div className="mt-[clamp(34px,4vw,90px)] flex flex-wrap items-baseline gap-x-[clamp(18px,2vw,44px)] gap-y-[0.8em]">
-        <p className="text-[length:var(--fs-lead)] font-medium leading-[1.2] tracking-[-0.02em] text-[var(--fg)]">
-          Not sure which package fits?
-        </p>
-        <Link
-          href="/contact"
-          className="group relative text-[length:var(--fs-lead)] font-medium leading-[1.2] tracking-[-0.02em] text-accent"
-        >
-          Send a message
-          <span className="absolute -bottom-0.5 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-[500ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100" />
-        </Link>
-        <a
-          href={LINKS.instagram}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="micro text-[var(--fg-70)] transition-colors duration-300 hover:text-accent"
-        >
-          Or on Instagram
-        </a>
-      </div>
+      {ask && (
+        <div className="mt-[clamp(46px,5vw,110px)] flex flex-col items-center gap-[clamp(14px,1.4vw,28px)]">
+          <CtaBlock {...ask} />
+          <a
+            href={LINKS.instagram}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="micro inline-flex min-h-[24px] items-center text-[var(--fg-70)] transition-colors duration-300 hover:text-accent"
+          >
+            Or on Instagram
+          </a>
+        </div>
+      )}
     </section>
   );
 }

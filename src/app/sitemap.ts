@@ -14,6 +14,7 @@ const ROUTES: {
   { path: "/", modified: "2026-09-27", changeFrequency: "monthly", priority: 1 },
   { path: "/portfolio", modified: "2026-09-27", changeFrequency: "monthly", priority: 0.8 },
   { path: "/services", modified: "2026-10-31", changeFrequency: "monthly", priority: 0.8 },
+  { path: "/motion", modified: "2026-11-01", changeFrequency: "monthly", priority: 0.8 },
   { path: "/contact", modified: "2026-09-27", changeFrequency: "yearly", priority: 0.7 },
   { path: "/privacy", modified: "2026-10-08", changeFrequency: "yearly", priority: 0.3 },
   { path: "/terms", modified: "2026-09-27", changeFrequency: "yearly", priority: 0.3 },
