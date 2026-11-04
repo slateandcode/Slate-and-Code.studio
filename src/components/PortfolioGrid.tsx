@@ -34,25 +34,31 @@ import { CtaBlock } from "./PillCTA";
    number and kind of whichever scene holds the screen.
 --------------------------------------------------------------------------- */
 
-/* The previews made for real businesses open the page, in the order the
-   list gives them: they are the custom-builder work the studio is moving
-   toward. Then the latest builds, in this order. */
-const PREVIEWS = WORKS.filter((w) => w.preview);
-const FEATURED = [
-  "Whitecombe Roofing",
+/* The page opens on the strongest work, in this order, previews and builds
+   mixed. Then the other previews made for real businesses, then the next
+   builds the studio wants seen. */
+const LEAD = [
   "Hartwell Gardens",
+  "Paramount Campers",
+  "Moorland Horseboxes",
+  "Hand Laid Eggs",
+  "Garden Getaways",
   "Plainwater",
-  "Ashby Properties",
-  "Lima's No Limits",
+  "Crescent Car Check",
+  "Superior Ink",
 ];
-const featured = FEATURED.flatMap((name) => WORKS.filter((w) => w.name === name));
-const rest = WORKS.filter((w) => !w.preview && !FEATURED.includes(w.name));
+const FEATURED = ["Whitecombe Roofing", "Ashby Properties", "Lima's No Limits"];
+const pick = (names: string[]) => names.flatMap((name) => WORKS.filter((w) => w.name === name));
+const placed = [...LEAD, ...FEATURED];
+const previews = WORKS.filter((w) => w.preview && !placed.includes(w.name));
+const rest = WORKS.filter((w) => !w.preview && !placed.includes(w.name));
 
 /* then the other live projects, since they can be opened; the ones still
    being built close the page, each group in the order the list gives it */
 const ORDERED = [
-  ...PREVIEWS,
-  ...featured,
+  ...pick(LEAD),
+  ...previews,
+  ...pick(FEATURED),
   ...rest.filter((w) => w.href),
   ...rest.filter((w) => !w.href),
 ];

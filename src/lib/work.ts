@@ -48,17 +48,6 @@ export const WORKS: Work[] = [
     concept: true,
   },
   {
-    src: "/work/norhus-real-estate.webp",
-    name: "Nørhus Real Estate",
-    kind: "3D website",
-    stage: "#b3263c",
-    summary:
-      "A real estate site told as a 3D scroll story, from fourteen lit windows down to the one apartment still awake.",
-    href: "https://norhus-real-estate.vercel.app/",
-    alt: "Nørhus Real Estate website. A black and cream hero with 'Real estate in Copenhagen' set along a curve.",
-    concept: true,
-  },
-  {
     src: "/work/untold-archives.webp",
     name: "Untold Archives",
     kind: "Website",
@@ -67,28 +56,6 @@ export const WORKS: Work[] = [
       "Home for a documentary channel making cinematic portraits of internet creators.",
     href: "https://untoldarchives.com/",
     alt: "Untold Archives website. A dark hero with an old television showing 'Welcome to the archives'.",
-  },
-  {
-    src: "/work/perch.webp",
-    name: "Perch Website Tracker",
-    kind: "Landing page",
-    stage: "#86d3b8",
-    summary:
-      "Landing page for a privacy-first analytics tool. One line of script, no cookies, and every number that matters on one screen.",
-    href: "https://perch-website-tracker.vercel.app/",
-    alt: "Perch Website Tracker landing page. The headline reads 'Check your analytics without the maze' above a dashboard preview.",
-    concept: true,
-  },
-  {
-    src: "/work/kairos-k01.webp",
-    name: "Kairos Watch",
-    kind: "3D website",
-    stage: "#d9cfbf",
-    summary:
-      "Product site for the K-01, a hand-wound watch whose case, gears, and ticking movement are all built in code.",
-    href: "https://kairos-watch.vercel.app/",
-    alt: "Kairos Watch website. The K-01 watch face in close-up on a dark hero.",
-    concept: true,
   },
   {
     src: "/work/superior-ink.webp",
@@ -251,16 +218,6 @@ export const WORKS: Work[] = [
     href: "https://plaintwater.vercel.app/",
     alt: "Plainwater website. 'Plainwater Washing' in a large serif, crossed by a blue hose from a pressure washer, between before and after photos of a patio.",
     concept: true,
-  },
-  {
-    src: "/work/all-about-campers.webp",
-    name: "All About Campers",
-    kind: "Website",
-    stage: "#7f9a83",
-    summary:
-      "Site for a Perth maker of universal-fit camper kits in lightweight RV ply, cut in Wanneroo and built to drop straight into the van, with a configurator to pick the kit.",
-    alt: "All About Campers website. 'Pick your kit. Drop it in.' in a large serif beside a fanned stack of kit cards priced at $4,990.",
-    preview: true,
   },
   {
     src: "/work/paramount-campers.webp",

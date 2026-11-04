@@ -557,7 +557,7 @@ export const LANDINGS: Landing[] = [
       {
         kind: "proof",
         title: ["Builder", "sites"],
-        text: "The [portfolio](/portfolio) includes preview sites made for real UK builders, among them All About Campers, Paramount Campers, Col's Campers, Moorland Horseboxes and Garden Getaways. Each is a working site, not a mockup, built around that builder's own work.",
+        text: "The [portfolio](/portfolio) includes preview sites made for real UK builders, among them Paramount Campers, Col's Campers, Moorland Horseboxes and Garden Getaways. Each is a working site, not a mockup, built around that builder's own work.",
       },
       {
         kind: "pricing",
@@ -725,7 +725,7 @@ export const LANDINGS: Landing[] = [
       {
         kind: "proof",
         title: ["Campervan", "sites"],
-        text: "Preview sites for All About Campers, Paramount Campers and Col's Campers are on the [portfolio](/portfolio). Each one is a working site built around that converter's own vans.",
+        text: "Preview sites for Paramount Campers and Col's Campers are on the [portfolio](/portfolio). Each one is a working site built around that converter's own vans.",
       },
       {
         kind: "pricing",
