@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import JsonLd from "@/components/JsonLd";
@@ -68,11 +69,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* PRIVACY: the only tracking on the site is the Meta Pixel, and it
-            loads only after consent on the banner (<MetaPixel />, see
-            src/lib/pixel.ts). /privacy says exactly that. Adding Google
-            Analytics, Vercel Analytics or any other tracking script means
-            gating it the same way, naming the provider in the "Automatically",
+        {/* PRIVACY: two things measure visitors. Vercel Web Analytics
+            (<Analytics />) uses no third-party cookies and is not tied to an
+            individual, so it counts every visit without the banner. The Meta
+            Pixel sets advertising cookies and loads only after consent
+            (<MetaPixel />, see src/lib/pixel.ts). /privacy says exactly that.
+            Adding Google Analytics or any other tracking script means gating
+            it like the pixel, naming the provider in the "Automatically",
             "Cookies" and "Who we share it with" sections of
             src/app/privacy/page.tsx, and bumping LEGAL_UPDATED. */}
         {PRELOAD.map((f) => (
@@ -91,6 +94,7 @@ export default function RootLayout({
         <JsonLd data={organizationSchema()} />
         <SmoothScroll>{children}</SmoothScroll>
         <MetaPixel />
+        <Analytics />
       </body>
     </html>
   );

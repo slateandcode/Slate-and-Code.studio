@@ -20,9 +20,10 @@ export const metadata: Metadata = pageMetadata({
 });
 
 /* Every tool named here was checked against the codebase on the date at the
-   top: the Meta Pixel behind the consent banner (src/lib/pixel.ts), and no
-   other analytics, tracking scripts, cookies or embeds. Adding any of those
-   means updating the "Automatically" and "Cookies" sections first. */
+   top: the Meta Pixel behind the consent banner (src/lib/pixel.ts), Vercel
+   Web Analytics (layout.tsx), the YouTube player on /motion (ReelFan.tsx),
+   and no other analytics, tracking scripts, cookies or embeds. Adding any of
+   those means updating the "Automatically" and "Cookies" sections first. */
 const SECTIONS: LegalSection[] = [
   {
     id: "who-we-are",
@@ -55,7 +56,9 @@ const SECTIONS: LegalSection[] = [
           On the contact form: your name, email address and message, plus the
           budget and timeline if you choose them. On the free website form:
           your answers to its three questions, your name, your email address
-          and, if you give it, your website address.
+          and, if you give it, your website address. On the reel and video
+          editing forms: your name, email address and message, plus your
+          account or channel link and what you need, if you give them.
         </p>
 
         <h3>Automatically, when you visit</h3>
@@ -64,8 +67,20 @@ const SECTIONS: LegalSection[] = [
           pages you visit here and whether you send one of our forms, along
           with your browser and device details and your IP address, and links
           them to the Meta ad you came from. It sets a cookie to do this. If
-          you decline, or do not choose, it does not load at all. We use no
-          other analytics or tracking tools. Our hosting provider records standard
+          you decline, or do not choose, it does not load at all.
+        </p>
+        <p>
+          We count visits with Vercel Web Analytics, which does not depend on
+          the banner. It records the page you visit, the site you came from,
+          your approximate location, and your browser, device type and
+          operating system. It uses no third-party cookies and is not linked
+          to you as an individual: visits are told apart by a temporary hash
+          of the request, which is discarded after 24 hours. On our motion
+          design page, one reel is played by YouTube, so when that reel comes
+          to the front your IP address and browser details go to YouTube.
+        </p>
+        <p>
+          We use no other analytics or tracking tools. Our hosting provider records standard
           technical information for each visit, such as your IP address,
           browser and device type, and the pages requested. This is needed to
           deliver the site and keep it secure. When you send the contact form,
@@ -125,8 +140,8 @@ const SECTIONS: LegalSection[] = [
           </li>
           <li>
             <strong>Legitimate interests</strong>, to reply to enquiries,
-            prepare audits and quotes, and keep this website secure, in ways
-            you would reasonably expect.
+            prepare audits and quotes, keep this website secure, and count
+            visits to it, in ways you would reasonably expect.
           </li>
           <li>
             <strong>Contract</strong>, to deliver work for clients, or to take
@@ -157,7 +172,8 @@ const SECTIONS: LegalSection[] = [
             its own privacy policy.
           </li>
           <li>
-            <strong>Vercel</strong>, which hosts this website.
+            <strong>Vercel</strong>, which hosts this website and counts
+            visits to it.
           </li>
           <li>
             <strong>Resend</strong>, which delivers contact form messages to
@@ -168,7 +184,8 @@ const SECTIONS: LegalSection[] = [
             sent to our address.
           </li>
           <li>
-            <strong>Google</strong> (Gmail), where our email is stored.
+            <strong>Google</strong>: Gmail, where our email is stored, and
+            YouTube, whose player shows one reel on our motion design page.
           </li>
           <li>
             A private notes and project tool, where we keep track of enquiries
@@ -215,6 +232,10 @@ const SECTIONS: LegalSection[] = [
           The Meta Pixel cookie expires after 90 days, or sooner if you
           withdraw consent or clear your cookies.
         </li>
+        <li>
+          The temporary hash Vercel Web Analytics uses to tell visits apart is
+          discarded after 24 hours.
+        </li>
       </ul>
     ),
   },
@@ -256,7 +277,8 @@ const SECTIONS: LegalSection[] = [
     body: (
       <>
         <p>
-          The only cookies on this website are advertising cookies from the
+          Apart from the YouTube player mentioned below, the only cookies on
+          this website are advertising cookies from the
           Meta Pixel (named <strong>_fbp</strong> and <strong>_fbc</strong>),
           and they are set only if you click Accept on the cookie banner. They
           tell us which of our Meta ads brought you here and whether you went
@@ -268,7 +290,7 @@ const SECTIONS: LegalSection[] = [
           change it at any time with Cookie settings at the bottom of every
           page. Withdrawing consent stops the pixel and removes its cookies.
           Sites we link to, such as Instagram, have their own cookies and
-          policies.
+          policies, and so does the YouTube player on our motion design page.
         </p>
       </>
     ),
