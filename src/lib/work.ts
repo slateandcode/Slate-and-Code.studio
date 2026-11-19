@@ -230,6 +230,26 @@ export const WORKS: Work[] = [
     preview: true,
   },
   {
+    src: "/work/cosy-cabins.webp",
+    name: "Cosy Cabins",
+    kind: "Website",
+    stage: "#2e3a2d",
+    summary:
+      "Site for a residential log cabin maker in Cavan, building one to four bedroom homes and garden rooms to order and delivering them nationwide.",
+    alt: "Cosy Cabins website. 'Residential log cabins that feel like home.' above a tilted row of photos of finished cabins and their interiors.",
+    preview: true,
+  },
+  {
+    src: "/work/acme-prints.webp",
+    name: "Acme Prints",
+    kind: "Landing page",
+    stage: "#d5412a",
+    summary:
+      "A page for companies at a Phoenix print and embroidery shop, covering uniforms, live event printing, branded gear and reorders, with brand jobs for Google and Gatorade alongside.",
+    alt: "Acme Prints website. 'Merch the Acme way' in heavy black type beside photos of screen printing at live brand events.",
+    preview: true,
+  },
+  {
     src: "/work/autoline.webp",
     name: "AutoLine Detailing",
     kind: "Website",
@@ -288,5 +308,45 @@ export const WORKS: Work[] = [
       "Site for a Southampton workshop making camper furniture and conversions in-house, with every bed, kitchen unit and drawer cut on its own CNC.",
     alt: "Col's Campers website. 'Camper furniture, made to fit your van.' above a fanned row of photos of fitted camper interiors.",
     preview: true,
+  },
+  {
+    src: "/work/floats-wa.webp",
+    name: "Floats WA",
+    kind: "Website",
+    stage: "#263570",
+    summary:
+      "Site for a horse float, boat and RV refurb workshop in Perth, with thirty years on the tools, refurbished floats shown as client work, and a quote from a single photo.",
+    alt: "Floats WA website. 'Better than new' in huge condensed type above a refurbished silver and white Rowville horse float.",
+    preview: true,
+  },
+  {
+    src: "/work/hollin-grove.webp",
+    name: "Hollin Grove",
+    kind: "Website",
+    stage: "#4f6a2a",
+    summary:
+      "Site for a Cumbrian furniture maker who mills, dries and builds every piece from fallen trees, including the customer's own.",
+    alt: "Hollin Grove website. The name in a huge serif behind an oak dining table and four chairs, with cards for the work and fallen trees.",
+    concept: true,
+  },
+  {
+    src: "/work/southmark.webp",
+    name: "Southmark Logistics",
+    kind: "Website",
+    stage: "#ff8400",
+    summary:
+      "Site for a Long Beach freight forwarder moving cargo by sea, road and air, booked once and tracked on one reference number.",
+    alt: "Southmark Logistics website. 'Southmark Global' in tall condensed type above a container ship loaded with orange, blue and white containers.",
+    concept: true,
+  },
+  {
+    src: "/work/kova.webp",
+    name: "Kova",
+    kind: "Store",
+    stage: "#b6b0a8",
+    summary:
+      "Shop for a suede sneaker label, with each colourway of the KV-01 rolling through the hero in front of the wordmark.",
+    alt: "Kova website. A stone suede sneaker in front of the KOVÄ wordmark, with black and rust pairs at either edge.",
+    concept: true,
   },
 ];

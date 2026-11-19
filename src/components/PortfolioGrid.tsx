@@ -39,6 +39,10 @@ import { CtaBlock } from "./PillCTA";
    builds the studio wants seen. */
 const LEAD = [
   "Hartwell Gardens",
+  "Kova",
+  "Southmark Logistics",
+  "Acme Prints",
+  "Hollin Grove",
   "Paramount Campers",
   "Moorland Horseboxes",
   "Hand Laid Eggs",
